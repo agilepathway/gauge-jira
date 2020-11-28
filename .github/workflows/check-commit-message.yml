@@ -1,0 +1,23 @@
+---
+name: 'Check commit message style'
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  check-commit-message-style:
+    if: (github.actor!= 'dependabot[bot]') && (contains(github.head_ref, 'dependabot/github_actions/') == false)
+    name: Check commit message style
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check
+        uses: mristin/opinionated-commit-message@v2.2.0
+        with:
+          allow-one-liners: 'true'
