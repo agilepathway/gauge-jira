@@ -3,6 +3,7 @@
  *  Licensed under the Apache License, Version 2.0
  *  See LICENSE in the project root for license information.
  *----------------------------------------------------------------*/
+//nolint:golint,stylecheck
 package util
 
 import (
@@ -10,15 +11,15 @@ import (
 	"path/filepath"
 )
 
-func init() {
+func init() { //nolint:gochecknoinits
 	AcceptedExtensions[".spec"] = true
 	AcceptedExtensions[".md"] = true
 	AcceptedExtensions[".cpt"] = true
 }
 
-var AcceptedExtensions = make(map[string]bool)
+var AcceptedExtensions = make(map[string]bool) //nolint:golint,gochecknoglobals
 
-func IsConceptFile(file string) bool {
+func IsConceptFile(file string) bool { //nolint:golint
 	return filepath.Ext(file) == ".cpt"
 }
 
@@ -28,18 +29,21 @@ func isValidSpecExtension(path string) bool {
 
 func findFilesInDir(dirPath string, isValidFile func(path string) bool) []string {
 	var files []string
-	filepath.Walk(dirPath, func(path string, f os.FileInfo, err error) error {
+
+	filepath.Walk(dirPath, func(path string, f os.FileInfo, err error) error { //nolint:errcheck,gosec
 		if err == nil && !f.IsDir() && isValidFile(path) {
 			files = append(files, path)
 		}
 		return err
 	})
+
 	return files
 }
 
 func findFilesIn(dirRoot string, isValidFile func(path string) bool) []string {
 	absRoot := getAbsPath(dirRoot)
 	files := findFilesInDir(absRoot, isValidFile)
+
 	return files
 }
 
@@ -48,6 +52,7 @@ func dirExists(dirPath string) bool {
 	if err == nil && stat.IsDir() {
 		return true
 	}
+
 	return false
 }
 
