@@ -1,7 +1,7 @@
-package export
+package export //nolint:stylecheck
 
 import "fmt"
 
-func Spec(spec string) {
+func Spec(spec string) { //nolint:stylecheck, golint
 	fmt.Println("Exporting spec")
 }
