@@ -42,6 +42,10 @@ jobs:
           gauge install jira --file $(ls -d bin/distros/*.zip)
 
       - name: Run FTs
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          JIRA_USERNAME: ${{ secrets.JIRA_USERNAME }}
         run: |
           cd functional-tests
           ./gradlew clean ft
