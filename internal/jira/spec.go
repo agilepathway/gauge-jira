@@ -17,9 +17,7 @@ func newSpec(filename string) spec {
 }
 
 func (s *spec) issueKeys() []string {
-	// nolint:godox
-	// TODO: implement this properly
-	return []string{"JIRAGAUGE-1"}
+	return parseIssueKeys(s.markdown)
 }
 
 func (s *spec) jiraFmt() string {
