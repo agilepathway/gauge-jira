@@ -30,3 +30,9 @@ jobs:
       run: |
         go run build/make.go
         go run build/make.go --install
+
+    - name: Unit tests
+      # have to set this env var because of the util package init which requires it to be set
+      env: 
+        GAUGE_PROJECT_ROOT: ${{ github.workspace }}
+      run: go run build/make.go --test --verbose
