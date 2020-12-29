@@ -49,6 +49,8 @@ func main() {
 		installPlugin(*pluginInstallPrefix)
 	} else if *distro {
 		createPluginDistro(*allPlatforms)
+	} else if *test {
+		runTests()
 	} else {
 		compile()
 	}
@@ -242,11 +244,21 @@ func setEnv(envVariables map[string]string) {
 	}
 }
 
+func runTests() {
+	if *verbose {
+		runProcess("go", "test", "./...", "-v")
+	} else {
+		runProcess("go", "test", "./...")
+	}
+}
+
+var test = flag.Bool("test", false, "Run the test cases")                                                                                               //nolint:gochecknoglobals,lll
 var install = flag.Bool("install", false, "Install to the specified prefix")                                                                            //nolint:gochecknoglobals,lll
 var pluginInstallPrefix = flag.String("plugin-prefix", "", "Specifies the prefix where the plugin will be installed")                                   //nolint:gochecknoglobals,lll
 var distro = flag.Bool("distro", false, "Creates distributables for the plugin")                                                                        //nolint:gochecknoglobals,lll
 var allPlatforms = flag.Bool("all-platforms", false, "Compiles or creates distributables for all platforms windows, linux, darwin both x86 and x86_64") //nolint:gochecknoglobals,lll
 var binDir = flag.String("bin-dir", "", "Specifies OS_PLATFORM specific binaries to install when cross compiling")                                      //nolint:gochecknoglobals,lll
+var verbose = flag.Bool("verbose", false, "Print verbose details")                                                                                      //nolint:gochecknoglobals,lll
 
 var (
 	platformEnvs = []map[string]string{ //nolint:gochecknoglobals
