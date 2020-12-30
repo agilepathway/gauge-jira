@@ -1,11 +1,11 @@
-Jira spec with scenarios
+Spec with no Jira scenarios
 ===============================
 
 tags: jira, java, dotnet, ruby, python, js
 
 * Initialize a project named "spec_with_scenarios" without example spec
 
-Basic spec with one scenario
+Basic spec with one non-Jira scenario
 -------------------------------------
 
 * Create a scenario "Sample scenario" in specification "Basic spec execution" with the following steps with implementation 
@@ -19,4 +19,4 @@ Basic spec with one scenario
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Successfully exported specs to Jira"
+* Console should contain "No Jira specifications were found - so nothing to publish to Jira"
