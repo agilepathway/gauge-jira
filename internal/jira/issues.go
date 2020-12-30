@@ -43,6 +43,15 @@ func (i issues) publish() {
 	for _, issue := range i {
 		i.publishIssue(issue, jiraClient)
 	}
+
+	switch len(i) {
+	case 0:
+		fmt.Println("No Jira specifications were found - so nothing to publish to Jira")
+	case 1:
+		fmt.Println("Published specifications to 1 Jira issue")
+	default:
+		fmt.Printf("Published specifications to %d Jira issues", len(i))
+	}
 }
 
 func (i issues) publishIssue(issue issue, jiraClient *jira.Client) {

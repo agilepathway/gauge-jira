@@ -31,7 +31,6 @@ func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails)
 	}
 
 	jira.PublishSpecs(specFilenames)
-	fmt.Println("Successfully exported specs to Jira")
 
 	return &gauge_messages.Empty{}, nil
 }
