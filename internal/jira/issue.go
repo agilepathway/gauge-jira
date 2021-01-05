@@ -12,7 +12,8 @@ func (i *issue) addSpec(spec spec) {
 }
 
 func (i *issue) publishSpecs() string {
-	return json.Fmt(i.currentDescription() + i.jiraFmtSpecs())
+	return json.Fmt(i.currentDescription() + "----\nh2.Specification Examples\n" + i.jiraFmtSpecs() +
+		"------------------------------\nEnd of specification examples\n----\n")
 }
 
 func (i *issue) jiraFmtSpecs() string {
