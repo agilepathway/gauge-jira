@@ -10,16 +10,17 @@ public class Jira {
 
     @Step("Jira issue <issuekey> description should contain basic scenario named <scenario name>")
     public void verifyJiraIssueDescriptionForBasicScenario(String issueKey, String scenarioName) {
-        String expectedScenario = expectedBasicScenarioHeader(scenarioName) + expectedBasicSpec() + 
-            expectedBasicScenarioFooter();
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(scenarioName) 
+            + expectedBasicSpec() +  expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
     @Step("Jira issue <issuekey> description should contain <originalDescription> and basic scenario")
     public void verifyJiraIssueContainsOriginalDescriptionAndBasicScenario(String issueKey, String originalDescription) {
-        String expectedScenario = expectedOriginalDescription(originalDescription) + expectedBasicScenarioHeader(issueKey)
-         + expectedBasicSpec() +  expectedBasicScenarioFooter();
+        String expectedScenario = expectedOriginalDescription(originalDescription) + expectedExamplesHeader()
+            + expectedBasicScenarioHeader(issueKey) + expectedBasicSpec() + expectedBasicScenarioFooter() 
+            + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
@@ -31,17 +32,18 @@ public class Jira {
 
     @Step("Jira issue <issuekey> description should contain basic scenario, twice")
     public void verifyJiraIssueDescriptionForTwoBasicScenarios(String issueKey) {
-        String expectedScenario = expectedBasicScenarioHeader(issueKey) + expectedBasicSpec() + expectedBasicSpec()
-             + expectedBasicScenarioFooter();
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(issueKey)
+            + expectedBasicSpec() + expectedBasicSpec()
+            + expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
     @Step("Jira issue <issuekey> description should contain basic scenarios <scenario1>, <scenario2>")
     public void verifyJiraIssueDescriptionForTwoBasicScenarios(String issueKey, String scenario1, String scenario2) {
-        String expectedDescription = expectedBasicScenarioHeader(scenario1) + expectedBasicSpec()
-            + expectedBasicScenarioFooter() + expectedBasicScenarioHeader(scenario2) + expectedBasicSpec()
-            + expectedBasicScenarioFooter();
+        String expectedDescription = expectedExamplesHeader() + expectedBasicScenarioHeader(scenario1) 
+            + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedBasicScenarioHeader(scenario2) 
+            + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedDescription);
     }
@@ -49,6 +51,21 @@ public class Jira {
     @Step("Set description <description> on Jira issue <issuekey>")
     public void setJiraIssueDescription(String description, String issueKey) {
         setIssueDescription(description, issueKey);
+    }
+
+    private String expectedExamplesHeader() {
+        return """
+        ----
+        h2.Specification Examples
+        """;
+    }
+
+    private String expectedExamplesFooter() {
+        return """
+            ------------------------------
+            End of specification examples
+            ----
+            """;
     }
 
     private String expectedOriginalDescription(String originalDescription) {
