@@ -76,7 +76,7 @@ public class Jira {
 
     private String expectedBasicScenarioHeader(String scenarioName) {
         return """
-            h1. %s
+            h3. %s
 
             tags:\040
 
@@ -85,7 +85,7 @@ public class Jira {
 
     private String expectedBasicSpec() {
         return """
-            h2. Sample scenario
+            h4. Sample scenario
 
             * First step
             * Second step

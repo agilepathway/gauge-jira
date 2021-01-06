@@ -3,6 +3,7 @@ package jira
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
 
 	"github.com/agilepathway/gauge-jira/util"
 )
@@ -21,7 +22,15 @@ func (s *spec) issueKeys() []string {
 }
 
 func (s *spec) jiraFmt() string {
-	return mdToJira(s.markdown)
+	jiraFormatted := mdToJira(s.markdown)
+	return s.downsizeHeadings(jiraFormatted)
+}
+
+func (s *spec) downsizeHeadings(input string) string {
+	input = regexp.MustCompile(`h1\.`).ReplaceAllString(input, "h3.")
+	input = regexp.MustCompile(`h2\.`).ReplaceAllString(input, "h4.")
+
+	return input
 }
 
 func readMarkdown(filename string) string {
