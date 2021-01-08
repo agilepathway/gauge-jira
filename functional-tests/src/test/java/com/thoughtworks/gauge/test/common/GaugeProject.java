@@ -193,8 +193,8 @@ public abstract class GaugeProject {
         return exitCode;
     }
 
-    public ExecutionSummary generateSpectacleDocumentation() throws Exception {
-        String[] args = new String[]{"docs", "spectacle", "specs/"};
+    public ExecutionSummary publishJiraDocumentation() throws Exception {
+        String[] args = new String[]{"docs", "jira", "specs/"};
         boolean success = executeGaugeCommand(args, null);
         return new ExecutionSummary(String.join(" ", args), success, lastProcessStdout, lastProcessStderr);
     }

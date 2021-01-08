@@ -1,17 +1,17 @@
 {
-    "id" : "spectacle",
-    "version" : "0.1.5",
-    "name" : "Spectacle",
-    "description" : "Markdown to HTML",
+    "id" : "jira",
+    "version" : "0.1.0",
+    "name" : "Jira",
+    "description" : "Publishes Gauge specifications to Jira",
     "install": {
         "windows": [],
         "linux": [],
         "darwin": []
     },
     "command" : {
-        "windows" : ["spectacle"],
-        "linux" : ["spectacle"],
-        "darwin" : ["spectacle"]
+        "windows" : ["jira"],
+        "linux" : ["jira"],
+        "darwin" : ["jira"]
     },
     "scope" : ["documentation"],
     "gaugeVersionSupport": {

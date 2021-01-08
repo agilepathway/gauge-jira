@@ -6,7 +6,6 @@
 package util
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -57,26 +56,24 @@ func fileExists(path string) bool {
 	if err == nil {
 		return true
 	}
+
 	return !os.IsNotExist(err)
 }
 
-func GetFiles(path string) []string {
+func GetFiles(path string) []string { //nolint:golint
 	var specFiles []string
 	if dirExists(path) {
 		specFiles = append(specFiles, findFilesIn(path, isValidSpecExtension)...)
 	} else if fileExists(path) && isValidSpecExtension(path) {
 		specFiles = append(specFiles, getAbsPath(path))
 	}
-	return specFiles
-}
 
-func CreateDirectory(dir string) {
-	err := os.MkdirAll(dir, 0755)
-	Fatal(fmt.Sprintf("Failed to create directory %s", dir), err)
+	return specFiles
 }
 
 func getAbsPath(path string) string {
 	f, err := filepath.Abs(path)
 	Fatal("Cannot get absolute path", err)
+
 	return f
 }
