@@ -37,7 +37,7 @@ const (
 	bin               = "bin"
 	newDirPermissions = 0755
 	gauge             = "gauge"
-	spectacle         = "spectacle"
+	jira              = "jira"
 	pluginJsonFile    = "plugin.json"
 )
 
@@ -57,7 +57,7 @@ func compile() {
 	if *allPlatforms {
 		compileAcrossPlatforms()
 	} else {
-		compileGoPackage(spectacle)
+		compileGoPackage(jira)
 	}
 }
 
@@ -76,7 +76,7 @@ func createPluginDistro(forAllPlatforms bool) {
 }
 
 func createDistro() {
-	packageName := fmt.Sprintf("%s-%s-%s.%s", spectacle, getPluginVersion(), getGOOS(), getArch())
+	packageName := fmt.Sprintf("%s-%s-%s.%s", "gauge-"+jira, getPluginVersion(), getGOOS(), getArch())
 	mirrorFile(pluginJsonFile, filepath.Join(getBinDir(), pluginJsonFile))
 	os.Mkdir(filepath.Join(bin, distros), 0755)
 	createZipFromUtil(getBinDir(), packageName)
@@ -186,7 +186,7 @@ func executeCommand(command string, arg ...string) (string, error) {
 }
 
 func compileGoPackage(packageName string) {
-	runProcess("go", "build", "-o", getGaugeExecutablePath(spectacle))
+	runProcess("go", "build", "-o", getGaugeExecutablePath(jira))
 }
 
 func getGaugeExecutablePath(file string) string {
@@ -256,12 +256,12 @@ func compileAcrossPlatforms() {
 	for _, platformEnv := range platformEnvs {
 		setEnv(platformEnv)
 		fmt.Printf("Compiling for platform => OS:%s ARCH:%s \n", platformEnv[GOOS], platformEnv[GOARCH])
-		compileGoPackage(spectacle)
+		compileGoPackage(jira)
 	}
 }
 
 func installPlugin(installPrefix string) {
-	pluginInstallPath := filepath.Join(installPrefix, spectacle, getPluginVersion())
+	pluginInstallPath := filepath.Join(installPrefix, jira, getPluginVersion())
 	mirrorDir(getBinDir(), pluginInstallPath)
 	mirrorFile(pluginJsonFile, filepath.Join(pluginInstallPath, pluginJsonFile))
 }

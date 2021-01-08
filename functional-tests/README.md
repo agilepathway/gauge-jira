@@ -3,7 +3,7 @@
 The functional tests are themselves Gauge tests.
 
 The scaffolding for the tests has been lifted and shifted from the
-[gauge-tests](https://github.com/getgauge/gauge-tests) repository. When adding more Spectacle
+[gauge-tests](https://github.com/getgauge/gauge-tests) repository. When adding more
 functional tests definitely browse the `gauge-tests` repository for inspiration and ideas.
 
 The functional tests run on every push and pull request, triggered by
@@ -17,7 +17,7 @@ The functional tests run on every push and pull request, triggered by
   gauge install java
   ```
 
-- [Install Spectacle](../README.md#installation)
+- [Install the Jira plugin](../README.md#installation)
 (you may want to [install from source](../README.md#build-from-source) to test your latest code)
 
 - Clone this repo.

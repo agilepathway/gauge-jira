@@ -16,8 +16,8 @@ public class Execution {
         return ExecutionSummaryAssert.assertThat(summary).withFailMessage(getFormattedProcessOutput()).hasSuccess(result);
     }
 
-    @Step("Generate Spectacle Documentation for the current project")
-    public void generateSpectacleDocumentationForCurrentProject() throws Exception {
-        assertOn(getCurrentProject().generateSpectacleDocumentation(), true);
+    @Step("Publish Jira Documentation for the current project")
+    public void publishJiraDocumentationForCurrentProject() throws Exception {
+        assertOn(getCurrentProject().publishJiraDocumentation(), true);
     }
 }

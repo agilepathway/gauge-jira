@@ -30,7 +30,7 @@ jobs:
         run: |
           cd bin/distros
           if [ -z "$version" ]; then
-            version=$(ls spectacle* | head -1 | sed "s/\.[^\.]*$//" | sed "s/spectacle-//" | sed | sed "s/-[a-z]*\.[a-z0-9_]*$//");
+            version=$(ls gauge-jira* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-jira-//" | sed | sed "s/-[a-z]*\.[a-z0-9_]*$//");
           fi
           echo "::set-env name=VERSION::$version"
           artifacts=()
@@ -42,8 +42,8 @@ jobs:
           echo "---------------------------"
           echo "Updating release v$version"
           echo "---------------------------"
-          echo -e "Spectacle v$version\n\n" > desc.txt
-          release_description=$(ruby -e "$(curl -sSfL https://github.com/getgauge/gauge/raw/master/build/create_release_text.rb)" getgauge spectacle)
+          echo -e "Gauge Jira v$version\n\n" > desc.txt
+          release_description=$(ruby -e "$(curl -sSfL https://github.com/getgauge/gauge/raw/master/build/create_release_text.rb)" agilepathway gauge-jira)
           echo "$release_description" >> desc.txt
           echo "Creating new draft for release v$version"
           hub release create -F ./desc.txt "v$version"
@@ -60,7 +60,7 @@ jobs:
         run: |
           git clone https://github.com/getgauge/gauge-repository.git
           cd gauge-repository
-          python update_metadata.py spectacle $VERSION
-          commit_message=$(echo -e "Update spectacle to v$VERSION")
+          python update_metadata.py jira $VERSION
+          commit_message=$(echo -e "Update jira to v$VERSION")
           git commit -am "$commit_message"
           git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/getgauge/gauge-repository.git" master
