@@ -1,14 +1,9 @@
-Non-Jira spec with one scenario
-===============================
+# Create a basic scenario linked to Jira issue <issuekey>
 
-tags: java, dotnet, ruby, python, js
+The JIRA issue key can appear anywhere within the specification.
+It's only for convenience that we're including the issue key in the specification name itself here.
 
-* Initialize a project named "spec_with_scenarios" without example spec
-
-Basic spec
--------------------------------------
-
-* Create a scenario "Sample scenario" in specification "Basic spec execution" with the following steps with implementation 
+* Create a scenario "Sample scenario" in specification <issuekey> with the following steps with implementation 
 
    |step text               |implementation                                          |
    |------------------------|--------------------------------------------------------|
@@ -16,7 +11,3 @@ Basic spec
    |Second step             |"inside second step"                                    |
    |Third step              |"inside third step"                                     |
    |Step with "two" "params"|"inside step with parameters : " + param0 + " " + param1|
-
-* Publish Jira Documentation for the current project
-
-* Console should contain "No Jira specifications were found - so nothing to publish to Jira"
