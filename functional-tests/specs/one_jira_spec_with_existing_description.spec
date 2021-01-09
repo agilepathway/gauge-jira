@@ -8,14 +8,16 @@ tags: java, dotnet, ruby, python, js
 Basic Jira spec
 -------------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-1"
+* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-5"
+
+* Set description "Original description\nsome more text" on Jira issue "JIRAGAUGE-5"
 
 * Publish Jira Documentation for the current project
 
 * Console should contain "Published specifications to 1 Jira issue"
 
-* Jira issue "JIRAGAUGE-1" description should contain basic scenario
+* Jira issue "JIRAGAUGE-5" description should contain "Original description\nsome more text" and basic scenario
 
 ___
 
-* Set description "" on Jira issue "JIRAGAUGE-1"
+* Set description "" on Jira issue "JIRAGAUGE-5"

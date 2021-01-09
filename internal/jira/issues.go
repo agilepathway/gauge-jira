@@ -55,7 +55,7 @@ func (i issues) publish() {
 }
 
 func (i issues) publishIssue(issue issue, jiraClient *jira.Client) {
-	req, err := jiraClient.NewRawRequest("PUT", fmt.Sprintf("rest/api/2/issue/%s", issue.key), bytes.NewBufferString(`{"update":{"description":[{"set": "`+issue.jiraFmtSpecs()+`"}]}}`)) //nolint:lll
+	req, err := jiraClient.NewRawRequest("PUT", fmt.Sprintf("rest/api/2/issue/%s", issue.key), bytes.NewBufferString(`{"update":{"description":[{"set": "`+issue.publishSpecs()+`"}]}}`)) //nolint:lll
 	util.Fatal("Error while creating Jira request %v", err)
 
 	req.Header.Set("Content-type", "application/json")

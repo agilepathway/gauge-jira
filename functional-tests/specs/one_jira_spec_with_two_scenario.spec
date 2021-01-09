@@ -17,3 +17,7 @@ Basic Jira spec with two scenarios, linked to same issue
 * Console should contain "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-2" description should contain basic scenario, twice
+
+___
+
+* Set description "" on Jira issue "JIRAGAUGE-2"
