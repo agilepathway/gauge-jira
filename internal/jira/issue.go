@@ -17,9 +17,14 @@ func (i *issue) addSpec(spec spec) {
 	i.specs = append(i.specs, spec)
 }
 
-func (i *issue) publishSpecs() string {
-	return json.Fmt(i.currentDescriptionWithExistingSpecsRemoved() +
-		i.specsHeader() + i.jiraFmtSpecs() + i.specsFooter())
+func (i *issue) specsFormattedForJira() (string, error) {
+	currentDescriptionWithExistingSpecsRemoved, err := i.currentDescriptionWithExistingSpecsRemoved()
+	if err != nil {
+		return "", err
+	}
+
+	return json.Fmt(currentDescriptionWithExistingSpecsRemoved +
+		i.specsHeader() + i.jiraFmtSpecs() + i.specsFooter()), nil
 }
 
 func (i *issue) specsHeader() string {
@@ -39,26 +44,36 @@ func (i *issue) jiraFmtSpecs() string {
 	return jiraFmtSpecs
 }
 
-func (i *issue) currentDescriptionWithExistingSpecsRemoved() string {
+func (i *issue) currentDescriptionWithExistingSpecsRemoved() (string, error) {
 	regexString := fmt.Sprintf("(?s)%s(.*)%s", i.specsHeader(), i.specsFooter())
 	r := regexp.MustCompile(regexString)
-	removed := r.ReplaceAllString(i.currentDescription(), "\n")
+	currentDescription, err := i.currentDescription()
 
-	if strings.TrimSpace(removed) == "" {
-		return ""
+	if err != nil {
+		return "", err
 	}
 
-	return removed
+	removed := r.ReplaceAllString(currentDescription, "\n")
+
+	if strings.TrimSpace(removed) == "" {
+		return "", nil
+	}
+
+	return removed, nil
 }
 
-func (i *issue) currentDescription() string {
+func (i *issue) currentDescription() (string, error) {
 	jiraClient := jiraClient()
-	issue, _, _ := jiraClient.Issue.Get(i.key, nil)
+	issue, _, err := jiraClient.Issue.Get(i.key, nil)
+
+	if err != nil {
+		return "", err
+	}
 
 	description := issue.Fields.Description
 	if description == "" {
-		return ""
+		return "", nil
 	}
 
-	return description + "\n"
+	return description + "\n", nil
 }
