@@ -8,7 +8,7 @@ tags: java, dotnet, ruby, python, js
 Basic Jira spec
 -------------------------------------
 
-* Create a basic scenario linked to Jira issue "JIRAGAUGE-1"
+* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-1"
 
 * Publish Jira Documentation for the current project
 

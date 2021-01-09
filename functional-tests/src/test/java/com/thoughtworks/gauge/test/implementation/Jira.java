@@ -15,12 +15,17 @@ import org.json.JSONObject;
 
 public class Jira {
 
-    @Step("Jira issue <issuekey> description should contain basic scenario")
-    public void verifyJiraIssueDescriptionForBasicScenario(String issueKey) throws IOException, InterruptedException {
-        String expectedScenario = expectedBasicScenarioHeader(issueKey) + expectedBasicSpec() + 
+    @Step("Jira issue <issuekey> description should contain basic scenario named <scenario name>")
+    public void verifyJiraIssueDescriptionForBasicScenario(String issueKey, String scenarioName) throws IOException, InterruptedException {
+        String expectedScenario = expectedBasicScenarioHeader(scenarioName) + expectedBasicSpec() + 
             expectedBasicScenarioFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
+    }
+
+    @Step("Jira issue <issuekey> description should contain basic scenario")
+    public void verifyJiraIssueDescriptionForBasicScenario(String issueKey) throws IOException, InterruptedException {
+        verifyJiraIssueDescriptionForBasicScenario(issueKey, issueKey);
     }
 
     @Step("Jira issue <issuekey> description should contain basic scenario, twice")
@@ -31,13 +36,13 @@ public class Jira {
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
-    private String expectedBasicScenarioHeader(String issueKey) {
+    private String expectedBasicScenarioHeader(String scenarioName) {
         return """
             h1. %s
 
             tags:\040
 
-            """.formatted(issueKey);
+            """.formatted(scenarioName);
     }
 
     private String expectedBasicSpec() {
