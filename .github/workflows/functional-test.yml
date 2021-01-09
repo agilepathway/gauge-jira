@@ -33,7 +33,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
-          java-version: '11' # Need minimum Java 11 for httpclient code
+          java-version: '15' # Need minimum Java 15 for text blocks in functional tests
 
       - name: Install Gauge
         uses: getgauge/setup-gauge@master

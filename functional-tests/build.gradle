@@ -18,7 +18,7 @@ dependencies {
     testImplementation 'org.json:json:20200518'
 }
 
-sourceCompatibility = '11'
+sourceCompatibility = '15'
 
 import com.thoughtworks.gauge.gradle.*
 
