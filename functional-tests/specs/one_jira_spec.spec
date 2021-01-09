@@ -1,4 +1,4 @@
-One Jira spec
+One Jira spec with one scenario
 ===============================
 
 tags: java, dotnet, ruby, python, js
