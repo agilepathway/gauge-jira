@@ -3,9 +3,7 @@ package jira
 import (
 	"bytes"
 	"fmt"
-	"os"
 
-	"github.com/agilepathway/gauge-jira/util"
 	"github.com/andygrunwald/go-jira"
 )
 
@@ -79,17 +77,4 @@ func (i issues) publishIssue(issue issue, jiraClient *jira.Client) error {
 	}
 
 	return nil
-}
-
-func jiraClient() *jira.Client {
-	base := os.Getenv("JIRA_BASE_URL")
-	transport := jira.BasicAuthTransport{
-		Username: os.Getenv("JIRA_USERNAME"),
-		Password: os.Getenv("JIRA_TOKEN"),
-	}
-
-	jiraClient, err := jira.NewClient(transport.Client(), base)
-	util.Fatal("Error while creating Jira Client", err)
-
-	return jiraClient
 }
