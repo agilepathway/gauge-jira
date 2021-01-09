@@ -1,4 +1,4 @@
-package com.thoughtworks.gauge.test.implementation;
+package com.thoughtworks.gauge.test.jira;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static com.thoughtworks.gauge.test.jira.IssueDescriptionAPIClient.getDescriptionForIssue;
