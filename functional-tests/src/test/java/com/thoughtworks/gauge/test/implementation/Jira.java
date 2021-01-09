@@ -37,6 +37,15 @@ public class Jira {
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
+    @Step("Jira issue <issuekey> description should contain basic scenarios <scenario1>, <scenario2>")
+    public void verifyJiraIssueDescriptionForTwoBasicScenarios(String issueKey, String scenario1, String scenario2) {
+        String expectedDescription = expectedBasicScenarioHeader(scenario1) + expectedBasicSpec()
+            + expectedBasicScenarioFooter() + expectedBasicScenarioHeader(scenario2) + expectedBasicSpec()
+            + expectedBasicScenarioFooter();
+        String issueDescription = getDescriptionForIssue(issueKey);
+        assertThat(issueDescription).isEqualTo(expectedDescription);
+    }
+
     @Step("Set description <description> on Jira issue <issuekey>")
     public void setJiraIssueDescription(String description, String issueKey) {
         setIssueDescription(description, issueKey);
@@ -76,4 +85,5 @@ public class Jira {
 
             """;
     }
+    
 }
