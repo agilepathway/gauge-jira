@@ -19,4 +19,4 @@ Basic spec
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "No Jira specifications were found - so nothing to publish to Jira"
+* Console should contain "No valid Jira specifications were found - so nothing to publish to Jira"
