@@ -17,3 +17,8 @@ Basic Jira spec linked to two Jira issues
 * Jira issue "JIRAGAUGE-3" description should contain basic scenario named "JIRAGAUGE-3, JIRAGAUGE-4"
 
 * Jira issue "JIRAGAUGE-4" description should contain basic scenario named "JIRAGAUGE-3, JIRAGAUGE-4"
+
+___
+
+* Set description "" on Jira issue "JIRAGAUGE-3"
+* Set description "" on Jira issue "JIRAGAUGE-4"
