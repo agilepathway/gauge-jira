@@ -1,4 +1,4 @@
-# Create a basic scenario linked to Jira issue <issuekey>
+# Create a basic scenario linked to Jira issue(s) <issuekey>
 
 The JIRA issue key can appear anywhere within the specification.
 It's only for convenience that we're including the issue key in the specification name itself here.
