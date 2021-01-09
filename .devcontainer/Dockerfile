@@ -22,6 +22,14 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 RUN bash /tmp/scripts/go-debian.sh "latest" "${GOROOT}" "${GOPATH}" "${USERNAME}" \
     && apt-get clean -y && rm -rf /tmp/scripts
 
+# Install Gauge
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -SsL https://downloads.gauge.org/stable | sh \
+    && su vscode -c "gauge install java" \
+    && su vscode -c "gauge install html-report" \
+    && su vscode -c "gauge install screenshot" \
+    && su vscode -c "gauge install xml-report"
+
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>

@@ -16,11 +16,22 @@
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash",
+		"go.gopath": "/go",
+		"go.useLanguageServer": true,
+		"go.goroot": "/usr/local/go",
+		"go.toolsGopath": "/go/bin",
+		"go.lintTool":"golangci-lint",
+		"go.lintFlags": [ "--fast" ],
+		"workbench.colorTheme": "Default Dark+",
+		"files.autoSave": "afterDelay",
+		"files.autoSaveDelay": 500,
 		"java.home": "/docker-java-home"
 	},
 	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
+		"golang.Go",
+		"getgauge.gauge",
 		"vscjava.vscode-java-pack"
 	],
 
