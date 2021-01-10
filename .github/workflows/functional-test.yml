@@ -12,13 +12,23 @@ on:
 jobs:
 
   functional-tests:
-    name: ${{ matrix.language }} ${{ matrix.os }} FTs 
+    name: ${{ matrix.language }} ${{ matrix.jira-version }} ${{ matrix.os }} FTs 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         # no windows because `go run build/make.go --distro` errors (can't find zip executable)
         os: [ubuntu-latest, macos-latest]
         language: [java]
+        jira-version: [Jira Server, Jira Cloud]
+        include:
+          - jira-version: Jira Server
+            jira-base-url: JIRA_SERVER_BASE_URL
+            jira-username: JIRA_SERVER_USERNAME
+            jira-token: JIRA_SERVER_TOKEN
+          - jira-version: Jira Cloud
+            jira-base-url: JIRA_CLOUD_BASE_URL
+            jira-username: JIRA_CLOUD_USERNAME
+            jira-token: JIRA_CLOUD_TOKEN
       
     steps:
       - name: Set up Go 1.15
@@ -46,11 +56,11 @@ jobs:
           go run build/make.go && go run build/make.go --distro
           gauge install jira --file $(ls -d bin/distros/*.zip)
 
-      - name: Run FTs
+      - name: ${{ matrix.jira-version }} FTs
         env:
-          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-          JIRA_USERNAME: ${{ secrets.JIRA_USERNAME }}
+          JIRA_BASE_URL: ${{secrets[matrix.jira-base-url]}}
+          JIRA_USERNAME: ${{secrets[matrix.jira-username]}}
+          JIRA_TOKEN: ${{secrets[matrix.jira-token]}}
         run: |
           cd functional-tests
           ./gradlew clean ft

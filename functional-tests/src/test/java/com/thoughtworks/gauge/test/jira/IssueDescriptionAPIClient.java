@@ -42,7 +42,7 @@ public class IssueDescriptionAPIClient {
     }
 
     private static HttpResponse<String> sendIssueRequest(HttpRequest request) {
-        HttpClient client = HttpClient.newBuilder().build();
+        HttpClient client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
         try {
             return client.send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
