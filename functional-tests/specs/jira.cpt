@@ -11,3 +11,8 @@ It's only for convenience that we're including the issue key in the specificatio
    |Second step             |"inside second step"                                    |
    |Third step              |"inside third step"                                     |
    |Step with "two" "params"|"inside step with parameters : " + param0 + " " + param1|
+
+
+# Clear description on Jira issue <issuekey>
+
+* Set description "" on Jira issue <issuekey>

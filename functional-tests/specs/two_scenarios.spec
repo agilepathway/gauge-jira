@@ -20,4 +20,4 @@ Basic Jira spec with two scenarios, linked to same issue
 
 ___
 
-* Set description "" on Jira issue "JIRAGAUGE-2"
+* Clear description on Jira issue "JIRAGAUGE-2"

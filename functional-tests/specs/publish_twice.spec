@@ -22,4 +22,4 @@ Existing specs already in a Jira issue are overwritten when publishing
 
 ___
 
-* Set description "" on Jira issue "JIRAGAUGE-7"
+* Clear description on Jira issue "JIRAGAUGE-7"
