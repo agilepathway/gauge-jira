@@ -79,6 +79,7 @@ public class Jira {
 
     private String expectedBasicScenarioHeader(String scenarioName) {
         return """
+            ----
             h3. %s
 
             tags:\040
