@@ -57,6 +57,7 @@ public class Jira {
         return """
         ----
         h2.Specification Examples
+        h3.Do not edit these examples here.  Edit them using Gauge.
         """;
     }
 
