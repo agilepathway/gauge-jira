@@ -23,7 +23,7 @@ func (s *spec) issueKeys() []string {
 
 func (s *spec) jiraFmt() string {
 	jiraFormatted := mdToJira(s.markdown)
-	return s.downsizeHeadings(jiraFormatted)
+	return "----\n" + s.downsizeHeadings(jiraFormatted)
 }
 
 func (s *spec) downsizeHeadings(input string) string {
