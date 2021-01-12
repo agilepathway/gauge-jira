@@ -56,6 +56,7 @@ public class Jira {
     private String expectedExamplesHeader() {
         return """
         ----
+        ----
         h2.Specification Examples
         h3.Do not edit these examples here.  Edit them using Gauge.
         """;
@@ -65,6 +66,7 @@ public class Jira {
         return """
             ------------------------------
             End of specification examples
+            ----
             ----
             """;
     }

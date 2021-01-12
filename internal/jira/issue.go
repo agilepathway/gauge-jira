@@ -28,11 +28,11 @@ func (i *issue) specsFormattedForJira() (string, error) {
 }
 
 func (i *issue) specsHeader() string {
-	return "----\nh2.Specification Examples\nh3.Do not edit these examples here.  Edit them using Gauge.\n"
+	return "----\n----\nh2.Specification Examples\nh3.Do not edit these examples here.  Edit them using Gauge.\n"
 }
 
 func (i *issue) specsFooter() string {
-	return "------------------------------\nEnd of specification examples\n----\n"
+	return "------------------------------\nEnd of specification examples\n----\n----\n"
 }
 
 func (i *issue) jiraFmtSpecs() string {
