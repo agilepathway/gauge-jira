@@ -32,7 +32,7 @@ func (i *issue) specsHeader() string {
 }
 
 func (i *issue) specsFooter() string {
-	return "------------------------------\nEnd of specification examples\n----\n----\n"
+	return "----\nEnd of specification examples\n----\n----\n"
 }
 
 func (i *issue) jiraFmtSpecs() string {

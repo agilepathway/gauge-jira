@@ -64,7 +64,7 @@ public class Jira {
 
     private String expectedExamplesFooter() {
         return """
-            ------------------------------
+            ----
             End of specification examples
             ----
             ----
