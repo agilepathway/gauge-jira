@@ -1,0 +1,32 @@
+name: Store distros
+on: push
+jobs:
+
+  distro:
+    name: Store distros 
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Set up Go 1.15
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+        id: go
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install Gauge
+        uses: getgauge/setup-gauge@master
+        with:
+          gauge-version: master
+
+      - name: Create Jira plugin binaries on all platforms
+        run: |
+          go run build/make.go --all-platforms && go run build/make.go --distro --all-platforms
+
+      - name: Store Jira plugin binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: gauge-jira-binaries-all-platforms
+          path: bin/distros/

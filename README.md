@@ -17,7 +17,10 @@ gauge install jira --version $VERSION
 
 ### Offline Installation
 
-Download the plugin zip from the [Github Releases](https://github.com/agilepathway/gauge-jira/releases).
+Download the plugin zip from the [Github Releases](https://github.com/agilepathway/gauge-jira/releases),
+or alternatively (if you want to experiment with an unreleased version, which is not recommended) from the
+[artifacts](https://docs.github.com/actions/managing-workflow-runs/downloading-workflow-artifacts) in the
+[`Store distros`](../../actions?query=workflow%3A%22Store+distros%22) GitHub Action
 
 use the ``--file`` or ``-f`` flag to install the plugin from  zip file.
 
