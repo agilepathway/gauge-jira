@@ -97,6 +97,10 @@ In the following image, the specs/scenarios are filtered using a tag expression(
 <img src="https://github.com/getgauge/spectacle/raw/master/images/filter_tags.png" alt="filter" style="width: 600px;"/>
 
 
+Contributing
+------------
+
+See the [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 License
 -------
