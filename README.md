@@ -1,8 +1,6 @@
 Gauge-Jira
 ==========
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
-
 Publishes Gauge specifications to Jira. This is a plugin for [gauge](https://gauge.org/).
 
 Installation
