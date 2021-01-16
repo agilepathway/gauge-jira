@@ -1,16 +1,16 @@
-name: Release on PR Merge
+name: Release
 
-on: deployment
+on: [deployment]
 
 jobs:
-  release:
+  deploy:
     if: github.event.deployment.environment == 'production'
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     env:
-      GITHUB_TOKEN: "${{ secrets.GAUGEBOT_GITHUB_TOKEN }}"
+      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     steps:
-      - name: Set up Go 1.13
-        uses: actions/setup-go@v1
+      - name: Set up Go
+        uses: actions/setup-go@v2
         with:
           go-version: 1.13
         id: go
@@ -18,21 +18,20 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Install hub
-        uses: geertvdc/setup-hub@master
-
       - name: Build artifacts
         run: |
           go run build/make.go --all-platforms
           go run build/make.go --all-platforms --distro
 
-      - name: Release on github
+      - name: Install hub
+        run: brew install hub
+
+      - name: update
         run: |
           cd bin/distros
           if [ -z "$version" ]; then
             version=$(ls gauge-jira* | head -1 | sed "s/\.[^\.]*$//" | sed "s/gauge-jira-//" | sed | sed "s/-[a-z]*\.[a-z0-9_]*$//");
           fi
-          echo "::set-env name=VERSION::$version"
           artifacts=()
           dir=`pwd`
           for i in `ls`; do
@@ -55,12 +54,16 @@ jobs:
                   exit 1
               fi
           done
+      - name: "deployment success"
+        if: success()
+        uses: "deliverybot/status@master"
+        with:
+          state: "success"
+          token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Update metadata in gauge-repository
-        run: |
-          git clone https://github.com/getgauge/gauge-repository.git
-          cd gauge-repository
-          python update_metadata.py jira $VERSION
-          commit_message=$(echo -e "Update jira to v$VERSION")
-          git commit -am "$commit_message"
-          git push "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/getgauge/gauge-repository.git" master
+      - name: "deployment failure"
+        if: failure()
+        uses: "deliverybot/status@master"
+        with:
+          state: "failure"
+          token: "${{ secrets.GITHUB_TOKEN }}"
