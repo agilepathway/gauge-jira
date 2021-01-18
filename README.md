@@ -2,9 +2,21 @@ Gauge-Jira
 ==========
 
 Publishes Gauge specifications to Jira. This is a plugin for [gauge](https://gauge.org/).
+___
+
+* [Installation](#installation)
+  * [Normal Installation](#normal-installation)
+  * [Offline Installation](#offline-installation)
+  * [Build from Source](#build-from-source)
+* [Contributing](#contributing)
+* [License](#license)
+
+___
 
 Installation
 ------------
+
+### Normal Installation
 
 ```
 gauge install jira
@@ -52,7 +64,7 @@ After compilation
 go run build/make.go --install
 ```
 
-### Creating distributable
+#### Creating distributable
 
 Note: Run after compiling
 
