@@ -24,11 +24,15 @@ func (i *issue) specsFormattedForJira() (string, error) {
 	}
 
 	return json.Fmt(currentDescriptionWithExistingSpecsRemoved +
-		i.specsHeader() + i.jiraFmtSpecs() + i.specsFooter()), nil
+		i.specsHeader() + i.specsSubheader() + i.jiraFmtSpecs() + i.specsFooter()), nil
 }
 
 func (i *issue) specsHeader() string {
-	return "----\n----\nh2.Specification Examples\nh3.Do not edit these examples here.  Edit them using Gauge.\n"
+	return "----\n----\nh2.Specification Examples\n"
+}
+
+func (i *issue) specsSubheader() string {
+	return "h3.Do not edit these examples here.  Edit them using Gauge.\n"
 }
 
 func (i *issue) specsFooter() string {
