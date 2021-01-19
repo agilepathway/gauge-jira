@@ -12,7 +12,11 @@ Firstly thanks for thinking of contributing - the project is [open source](https
   * [Local development from scratch](#local-development-from-scratch)
     * [Dependencies](#dependencies)
 
-[Functional tests](./functional-tests/README.md)
+[Unit tests](#unit-tests)
+  * [Prerequisites for the unit tests](#prerequisites-for-the-unit-tests)
+  * [Running the unit tests](#running-the-unit-tests)
+
+[Functional tests](#functional-tests)
 
 ## How to report a bug or suggest a new feature
 
@@ -50,3 +54,21 @@ and open it in Codespaces - easy!
 * [Go](https://golang.org)
 * [Java](https://www.java.com) version 15 or above (for [running the tests](./functional-tests/README.md))
 * [Gauge](https://gauge.org)
+
+
+### Unit tests
+
+The unit tests are written in [Go](https://golang.org)
+
+#### Prerequisites for the unit tests
+
+Set `GAUGE_PROJECT_ROOT` as an environment variable with the full path of the project root directory,
+e.g. `/home/someuser/workspace/gauge-jira`
+
+#### Running the unit tests
+
+`go test -v ./...`
+
+### Functional tests
+
+[Functional tests documentation](./functional-tests/README.md)
