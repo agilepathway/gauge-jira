@@ -8,7 +8,7 @@ tags: java, dotnet, ruby, python, js
 Existing specs already in a Jira issue are overwritten when publishing
 ----------------------------------------------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-7"
+* Create a scenario linked to Jira issue(s) "JIRAGAUGE-7"
 
 * Publish Jira Documentation for the current project
 

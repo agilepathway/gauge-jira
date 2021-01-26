@@ -8,7 +8,7 @@ tags: java, dotnet, ruby, python, js
 Basic Jira spec
 -------------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-5"
+* Create a scenario linked to Jira issue(s) "JIRAGAUGE-5"
 
 * Set description "Original description\nsome more text" on Jira issue "JIRAGAUGE-5"
 

@@ -8,7 +8,7 @@ tags: java, dotnet, ruby, python, js
 Basic spec
 -------------------------------------
 
-* Create a scenario "Sample scenario" in specification "Basic spec execution" with the following steps with implementation 
+* Create a scenario "Sample scenario" in specification "Spec not linked to Jira" with the following steps with implementation 
 
    |step text               |implementation                                          |
    |------------------------|--------------------------------------------------------|

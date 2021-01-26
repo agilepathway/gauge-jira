@@ -8,9 +8,9 @@ tags: java, dotnet, ruby, python, js
 Two specs linked to same Jira issue
 -----------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "first spec linked to JIRAGAUGE-6"
+* Create a scenario linked to Jira issue(s) "first spec linked to JIRAGAUGE-6"
 
-* Create a basic scenario linked to Jira issue(s) "second spec linked to JIRAGAUGE-6"
+* Create a scenario linked to Jira issue(s) "second spec linked to JIRAGAUGE-6"
 
 * Publish Jira Documentation for the current project
 
