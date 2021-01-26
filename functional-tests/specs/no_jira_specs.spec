@@ -3,7 +3,7 @@ Non-Jira spec with one scenario
 
 tags: java, dotnet, ruby, python, js
 
-* Initialize a project named "spec_with_scenarios" without example spec
+* Initialize an empty Gauge project
 
 Basic spec
 -------------------------------------

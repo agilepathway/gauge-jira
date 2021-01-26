@@ -3,7 +3,7 @@ Spec linked to two Jira issues
 
 tags: java, dotnet, ruby, python, js
 
-* Initialize a project named "spec_with_scenarios" without example spec
+* Initialize an empty Gauge project
 
 Basic Jira spec linked to two Jira issues
 -----------------------------------------

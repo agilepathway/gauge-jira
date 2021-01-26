@@ -3,7 +3,7 @@ Publish one Jira spec twice
 
 tags: java, dotnet, ruby, python, js
 
-* Initialize a project named "spec_with_scenarios" without example spec
+* Initialize an empty Gauge project
 
 Existing specs already in a Jira issue are overwritten when publishing
 ----------------------------------------------------------------------
