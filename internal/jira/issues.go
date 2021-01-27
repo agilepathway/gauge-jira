@@ -44,7 +44,7 @@ func (i issues) publish() {
 		err := i.publishIssue(issue, jiraClient)
 		if err != nil {
 			unpublishedIssues = append(unpublishedIssues, issue)
-			fmt.Printf("Failed to publish issue %s: %s", issue.key, err)
+			fmt.Printf("Failed to publish issue %s: %s\n", issue.key, err)
 		}
 	}
 
@@ -54,7 +54,7 @@ func (i issues) publish() {
 	case 1:
 		fmt.Println("Published specifications to 1 Jira issue")
 	default:
-		fmt.Printf("Published specifications to %d Jira issues", len(i))
+		fmt.Printf("Published specifications to %d Jira issues\n", len(i))
 	}
 }
 
@@ -71,8 +71,13 @@ func (i issues) publishIssue(issue issue, jiraClient *jira.Client) error {
 
 	req.Header.Set("Content-type", "application/json")
 
-	_, err = jiraClient.Do(req, nil)
+	response, err := jiraClient.Do(req, nil)
 	if err != nil {
+		if (response != nil) && (response.StatusCode == 400) && (len(specs) > 32767) { //nolint:gomnd
+			fmt.Printf("The specification(s) for issue %s exceeds the default Jira maximum field length of 32767 characters.\n", issue.key)               //nolint:lll
+			fmt.Println("You can ask your Jira administrator to increase the maximum field length (or raise a support ticket if you are on Jira Cloud).") //nolint:lll
+		}
+
 		return err
 	}
 
