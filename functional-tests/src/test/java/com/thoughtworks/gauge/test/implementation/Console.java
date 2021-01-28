@@ -14,4 +14,10 @@ public class Console {
         String output = getCurrentProject().getStdOut();
         assertThat(output).contains(message);
     }
+
+    @Step({"Console output should be <message>"})
+    public void consoleOutputShouldBe(String message) throws IOException {
+        String output = getCurrentProject().getStdOut();
+        assertThat(output.trim()).isEqualTo(message);
+    }
 }

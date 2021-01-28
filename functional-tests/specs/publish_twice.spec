@@ -12,11 +12,11 @@ Existing specs already in a Jira issue are overwritten when publishing
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 1 Jira issue"
+* Console output should be "Published specifications to 1 Jira issue"
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 1 Jira issue"
+* Console output should be "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-7" description should contain basic scenario
 

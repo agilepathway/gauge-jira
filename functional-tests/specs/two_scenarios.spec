@@ -14,7 +14,7 @@ Basic Jira spec with two scenarios, linked to same issue
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 1 Jira issue"
+* Console output should be "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-2" description should contain basic scenario, twice
 
