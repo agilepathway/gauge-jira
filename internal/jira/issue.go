@@ -49,15 +49,20 @@ func (i *issue) jiraFmtSpecs() string {
 }
 
 func (i *issue) currentDescriptionWithExistingSpecsRemoved() (string, error) {
-	regexString := fmt.Sprintf("(?s)%s(.*)%s", i.specsHeader(), i.specsFooter())
-	r := regexp.MustCompile(regexString)
 	currentDescription, err := i.currentDescription()
 
 	if err != nil {
 		return "", err
 	}
 
-	removed := r.ReplaceAllString(currentDescription, "\n")
+	return i.removeSpecsFrom(currentDescription)
+}
+
+func (i *issue) removeSpecsFrom(input string) (string, error) {
+	regexString := fmt.Sprintf("(?s)%s(.*)%s", i.specsHeader(), i.specsFooter())
+	r := regexp.MustCompile(regexString)
+
+	removed := r.ReplaceAllString(input, "\n")
 
 	if strings.TrimSpace(removed) == "" {
 		return "", nil
