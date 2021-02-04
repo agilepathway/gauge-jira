@@ -3,14 +3,14 @@ Two specs linked to same Jira issue
 
 tags: java, dotnet, ruby, python, js
 
-* Initialize a project named "spec_with_scenarios" without example spec
+* Initialize an empty Gauge project
 
 Two specs linked to same Jira issue
 -----------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "first spec linked to JIRAGAUGE-6"
+* Create a scenario linked to Jira issue(s) "first spec linked to JIRAGAUGE-6"
 
-* Create a basic scenario linked to Jira issue(s) "second spec linked to JIRAGAUGE-6"
+* Create a scenario linked to Jira issue(s) "second spec linked to JIRAGAUGE-6"
 
 * Publish Jira Documentation for the current project
 

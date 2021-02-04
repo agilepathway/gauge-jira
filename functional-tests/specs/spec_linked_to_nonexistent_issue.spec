@@ -3,12 +3,12 @@ One spec linked to a nonexistent Jira issue
 
 tags: java, dotnet, ruby, python, js
 
-* Initialize a project named "spec_with_scenarios" without example spec
+* Initialize an empty Gauge project
 
 One spec linked to a nonexistent Jira issue
 -------------------------------------------
 
-* Create a basic scenario linked to Jira issue(s) "JIRAGAUGE-100000"
+* Create a scenario linked to Jira issue(s) "JIRAGAUGE-100000"
 
 * Publish Jira Documentation for the current project
 

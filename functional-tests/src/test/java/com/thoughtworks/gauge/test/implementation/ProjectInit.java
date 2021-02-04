@@ -9,11 +9,11 @@ public class ProjectInit {
 
     private ThreadLocal<GaugeProject> currentProject = new ThreadLocal<GaugeProject>();
 
-    @Step("Initialize a project named <projName> without example spec")
-    public void projectInitWithoutHelloWorldSpec(String projName) throws Exception {
+    @Step("Initialize an empty Gauge project")
+    public void projectInit() throws Exception {
         currentProject.set(new ProjectBuilder()
                 .withLangauge(Util.getCurrentLanguage())
-                .withProjectName(projName)
+                .withProjectName("gauge_jira_specs")
                 .withoutExampleSpec()
                 .build(false));
     }
