@@ -1,19 +1,27 @@
 {
-    "id" : "jira",
-    "version" : "0.1.2",
-    "name" : "Jira",
-    "description" : "Publishes Gauge specifications to Jira",
+    "id": "jira",
+    "version": "0.1.3",
+    "name": "Jira",
+    "description": "Publishes Gauge specifications to Jira",
     "install": {
         "windows": [],
         "linux": [],
         "darwin": []
     },
-    "command" : {
-        "windows" : ["jira"],
-        "linux" : ["jira"],
-        "darwin" : ["jira"]
+    "command": {
+        "windows": [
+            "jira"
+        ],
+        "linux": [
+            "jira"
+        ],
+        "darwin": [
+            "jira"
+        ]
     },
-    "scope" : ["documentation"],
+    "scope": [
+        "documentation"
+    ],
     "gaugeVersionSupport": {
         "minimum": "1.0.7",
         "maximum": ""
