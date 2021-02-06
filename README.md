@@ -1,6 +1,8 @@
 Gauge-Jira
 ==========
 
+[![Gauge Badge](https://gauge.org/Gauge_Badge.svg)](https://gauge.org)
+
 Publishes Gauge specifications to Jira. This is a plugin for [gauge](https://gauge.org/).
 ___
 * [Why Publish Gauge Specs to Jira](#why-publish-gauge-specs-to-jira)
