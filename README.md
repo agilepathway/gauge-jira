@@ -3,6 +3,8 @@ Gauge-Jira
 
 [![Gauge Badge](https://gauge.org/Gauge_Badge.svg)](https://gauge.org)
 
+[![tests](https://github.com/agilepathway/gauge-jira/workflows/FTs/badge.svg)](https://github.com/agilepathway/gauge-jira/actions?query=workflow%3AFTs+event%3Apush+branch%3Amaster)
+
 Publishes Gauge specifications to Jira. This is a plugin for [gauge](https://gauge.org/).
 ___
 * [Why Publish Gauge Specs to Jira](#why-publish-gauge-specs-to-jira)
