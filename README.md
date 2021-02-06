@@ -3,11 +3,12 @@ Gauge-Jira
 
 [![Gauge Badge](https://gauge.org/Gauge_Badge.svg)](https://gauge.org)
 
-[![releases](https://img.shields.io/github/v/release/agilepathway/gauge-jira?color=blue&sort=semver)](https://github.com/agilepathway/gauge-jira/releases)
 [![build](https://github.com/agilepathway/gauge-jira/workflows/build/badge.svg)](https://github.com/agilepathway/gauge-jira/actions?query=workflow%3Abuild+event%3Apush+branch%3Amaster)
 [![tests](https://github.com/agilepathway/gauge-jira/workflows/FTs/badge.svg)](https://github.com/agilepathway/gauge-jira/actions?query=workflow%3AFTs+event%3Apush+branch%3Amaster)
 [![reviewdog](https://github.com/agilepathway/gauge-jira/workflows/reviewdog/badge.svg)](https://github.com/agilepathway/gauge-jira/actions?query=workflow%3Areviewdog+event%3Apush+branch%3Amaster)
 [![Go Report Card](https://goreportcard.com/badge/github.com/agilepathway/gauge-jira)](https://goreportcard.com/report/github.com/agilepathway/gauge-jira)
+
+[![releases](https://img.shields.io/github/v/release/agilepathway/gauge-jira?color=blue&sort=semver)](https://github.com/agilepathway/gauge-jira/releases)
 [![Supported Jira versions](https://img.shields.io/badge/supports-Jira%20Server%20%7C%20Jira%20Cloud-blue)](#supported-jira-versions)
 [![License](https://img.shields.io/github/license/agilepathway/gauge-jira?color=blue)](LICENSE)
 
