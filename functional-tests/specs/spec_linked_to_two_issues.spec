@@ -12,7 +12,7 @@ Basic Jira spec linked to two Jira issues
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 2 Jira issues"
+* Console output should be "Published specifications to 2 Jira issues"
 
 * Jira issue "JIRAGAUGE-3" description should contain basic scenario named "JIRAGAUGE-3, JIRAGAUGE-4"
 

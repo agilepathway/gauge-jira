@@ -14,7 +14,7 @@ Two specs linked to same Jira issue
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 1 Jira issue"
+* Console output should be "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-6" description should contain basic scenarios "first spec linked to JIRAGAUGE-6", "second spec linked to JIRAGAUGE-6"
 

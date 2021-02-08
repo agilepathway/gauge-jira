@@ -14,7 +14,7 @@ Basic Jira spec
 
 * Publish Jira Documentation for the current project
 
-* Console should contain "Published specifications to 1 Jira issue"
+* Console output should be "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-5" description should contain "Original description\nsome more text" and basic scenario
 
