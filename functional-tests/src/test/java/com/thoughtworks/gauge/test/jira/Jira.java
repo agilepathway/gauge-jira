@@ -10,17 +10,18 @@ public class Jira {
 
     @Step("Jira issue <issuekey> description should contain basic scenario named <scenario name>")
     public void verifyJiraIssueDescriptionForBasicScenario(String issueKey, String scenarioName) {
-        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(scenarioName) 
-            + expectedBasicSpec() +  expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(scenarioName)
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
     @Step("Jira issue <issuekey> description should contain <originalDescription> and basic scenario")
-    public void verifyJiraIssueContainsOriginalDescriptionAndBasicScenario(String issueKey, String originalDescription) {
+    public void verifyJiraIssueContainsOriginalDescriptionAndBasicScenario(String issueKey,
+            String originalDescription) {
         String expectedScenario = expectedOriginalDescription(originalDescription) + expectedExamplesHeader()
-            + expectedBasicScenarioHeader(issueKey) + expectedBasicSpec() + expectedBasicScenarioFooter() 
-            + expectedExamplesFooter();
+                + expectedBasicScenarioHeader(issueKey) + expectedBasicSpec() + expectedBasicScenarioFooter()
+                + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
@@ -32,18 +33,17 @@ public class Jira {
 
     @Step("Jira issue <issuekey> description should contain basic scenario, twice")
     public void verifyJiraIssueDescriptionForTwoBasicScenarios(String issueKey) {
-        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(issueKey)
-            + expectedBasicSpec() + expectedBasicSpec()
-            + expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeader(issueKey) + expectedBasicSpec()
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
     @Step("Jira issue <issuekey> description should contain basic scenarios <scenario1>, <scenario2>")
     public void verifyJiraIssueDescriptionForTwoBasicScenarios(String issueKey, String scenario1, String scenario2) {
-        String expectedDescription = expectedExamplesHeader() + expectedBasicScenarioHeader(scenario1) 
-            + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedBasicScenarioHeader(scenario2) 
-            + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String expectedDescription = expectedExamplesHeader() + expectedBasicScenarioHeader(scenario1)
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedBasicScenarioHeader(scenario2)
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
         String issueDescription = getDescriptionForIssue(issueKey);
         assertThat(issueDescription).isEqualTo(expectedDescription);
     }
@@ -53,58 +53,66 @@ public class Jira {
         setIssueDescription(description, issueKey);
     }
 
+    @Step("Set invalid description (with two Gauge sections) on Jira issue <issuekey>")
+    public void setInvalidDescriptionWithTwoGaugeSections(String issueKey) {
+        String exampleSection = expectedExamplesHeader() + expectedBasicScenarioHeader(issueKey) + expectedBasicSpec()
+                + expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String invalidDescriptionWithTwoGaugeSections = exampleSection + exampleSection;
+        setIssueDescription(invalidDescriptionWithTwoGaugeSections, issueKey);
+    }
+
     private String expectedExamplesHeader() {
         return """
-        ----
-        ----
-        h2.Specification Examples
-        h3.Do not edit these examples here.  Edit them using Gauge.
-        """;
+                ----
+                ----
+                h2.Specification Examples
+                h3.Do not edit these examples here.  Edit them using Gauge.
+                """;
     }
 
     private String expectedExamplesFooter() {
         return """
-            ----
-            End of specification examples
-            ----
-            ----
-            """;
+                ----
+                End of specification examples
+                ----
+                ----
+                """;
     }
 
     private String expectedOriginalDescription(String originalDescription) {
         return """
-            %s
-            """.formatted(originalDescription);
+                %s
+                """.formatted(originalDescription);
     }
 
     private String expectedBasicScenarioHeader(String scenarioName) {
         return """
-            ----
-            h3. %s
+                ----
+                h3. %s
 
-            tags:\040
+                tags:\040
 
-            """.formatted(scenarioName);
+                """.formatted(scenarioName);
     }
 
     private String expectedBasicSpec() {
         return """
-            h4. Sample scenario
+                h4. Sample scenario
 
-            * First step
-            * Second step
-            * Third step
-            * Step with "two" "params"
+                * First step
+                * Second step
+                * Third step
+                * Step with "two" "params"
 
-            """;
+                """;
     }
 
     private String expectedBasicScenarioFooter() {
         return """
 
-            *_*
+                *_*
 
-            """;
+                """;
     }
-    
+
 }
