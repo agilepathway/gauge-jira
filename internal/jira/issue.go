@@ -9,10 +9,13 @@ import (
 )
 
 const (
-	specsHeaderMessage = "h2.Specification Examples"
-	specsHeader        = "----\n----\n" + specsHeaderMessage + "\n"
-	specsSubheader     = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
-	specsFooter        = "----\nEnd of specification examples\n----\n----\n"
+	specsHeaderMessage = "Specification Examples"
+	// Jira sometimes adds or removes a space after the heading, so we need to cater for both scenarios
+	specsHeaderMessageRegex = "h2.\\s*" + specsHeaderMessage
+	specsHeader             = "----\n----\nh2." + specsHeaderMessage + "\n"
+	specsHeaderRegex        = "----\n----\n" + specsHeaderMessageRegex + "\n"
+	specsSubheader          = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
+	specsFooter             = "----\nEnd of specification examples\n----\n----\n"
 )
 
 type issue struct {
@@ -54,7 +57,7 @@ func (i *issue) currentDescriptionWithExistingSpecsRemoved() (string, error) {
 }
 
 func (i *issue) removeSpecsFrom(input string) (string, error) {
-	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeader, specsFooter)
+	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeaderRegex, specsFooter)
 	r := regexp.MustCompile(regexString)
 
 	removed := r.ReplaceAllString(input, "\n")
@@ -98,5 +101,8 @@ type description string
 // (hypothetically) in the Gauge Jira plugin itself which inadvertently led to a duplicate examples
 // section instead of replacing the existing one.
 func (desc description) isValid() bool {
-	return strings.Count(string(desc), specsHeaderMessage) < 2 //nolint:gomnd
+	regex := regexp.MustCompile(specsHeaderRegex)
+	matches := regex.FindAllStringIndex(string(desc), -1)
+
+	return len(matches) < 2 //nolint:gomnd
 }
