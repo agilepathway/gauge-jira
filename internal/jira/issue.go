@@ -15,8 +15,8 @@ const (
 	specsHeader             = "\n----\n----\nh2." + specsHeaderMessage + "\n"
 	specsHeaderRegex        = "\\s*----\\s*----\\s*" + specsHeaderMessageRegex + "\\s*"
 	specsSubheader          = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
-	specsFooter             = "----\nEnd of specification examples\n----\n----\n"
-	specsFooterRegex        = "----\\s*End of specification examples\\s*----\\s*----\\s*"
+	specsFooter             = "\n----\nEnd of specification examples\n----\n----\n"
+	specsFooterRegex        = "\\s*----\\s*End of specification examples\\s*----\\s*----\\s*"
 )
 
 type issue struct {

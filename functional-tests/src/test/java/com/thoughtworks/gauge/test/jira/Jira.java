@@ -63,7 +63,7 @@ public class Jira {
 
     private String expectedExamplesHeader() {
         return """
-                
+
                 ----
                 ----
                 h2.Specification Examples
@@ -73,6 +73,7 @@ public class Jira {
 
     private String expectedExamplesFooter() {
         return """
+
                 ----
                 End of specification examples
                 ----
