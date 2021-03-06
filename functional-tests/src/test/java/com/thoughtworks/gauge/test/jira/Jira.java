@@ -63,6 +63,7 @@ public class Jira {
 
     private String expectedExamplesHeader() {
         return """
+                
                 ----
                 ----
                 h2.Specification Examples

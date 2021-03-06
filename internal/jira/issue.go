@@ -12,10 +12,11 @@ const (
 	specsHeaderMessage = "Specification Examples"
 	// Jira sometimes adds or removes a space after the heading, so we need to cater for both scenarios
 	specsHeaderMessageRegex = "h2.\\s*" + specsHeaderMessage
-	specsHeader             = "----\n----\nh2." + specsHeaderMessage + "\n"
-	specsHeaderRegex        = "----\n----\n" + specsHeaderMessageRegex + "\n"
+	specsHeader             = "\n----\n----\nh2." + specsHeaderMessage + "\n"
+	specsHeaderRegex        = "\\s*----\\s*----\\s*" + specsHeaderMessageRegex + "\\s*"
 	specsSubheader          = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
 	specsFooter             = "----\nEnd of specification examples\n----\n----\n"
+	specsFooterRegex        = "----\\s*End of specification examples\\s*----\\s*----\\s*"
 )
 
 type issue struct {
@@ -57,7 +58,7 @@ func (i *issue) currentDescriptionWithExistingSpecsRemoved() (string, error) {
 }
 
 func (i *issue) removeSpecsFrom(input string) (string, error) {
-	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeaderRegex, specsFooter)
+	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeaderRegex, specsFooterRegex)
 	r := regexp.MustCompile(regexString)
 
 	removed := r.ReplaceAllString(input, "\n")

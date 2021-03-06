@@ -38,6 +38,59 @@ End of specification examples
 ----
 ----
 More description after the specs.`
+	inputWithLineBreaksBetweenRules = `
+This is a description of an issue.
+----
+
+----
+h2.        Specification Examples
+the spec
+----
+End of specification examples
+----
+
+----
+More description after the specs.`
+	inputWithLineBreaksBeforeAndAfter = `
+This is a description of an issue.
+
+
+----
+----
+h2.        Specification Examples
+the spec
+----
+End of specification examples
+----
+----
+
+
+More description after the specs.`
+	inputWithLineBreaksBetweenRulesAndSpecs = `
+This is a description of an issue.
+----
+----
+
+h2.        Specification Examples
+the spec
+
+----
+End of specification examples
+----
+----
+More description after the specs.`
+	inputWithLineBreakAfterFooter = `
+This is a description of an issue.
+----
+----
+h2.        Specification Examples
+the spec
+----
+End of specification examples
+
+----
+----
+More description after the specs.`
 )
 
 var issueTests = []struct { //nolint:gochecknoglobals
@@ -46,6 +99,10 @@ var issueTests = []struct { //nolint:gochecknoglobals
 	{inputWithNoSpaceAfterH2},
 	{inputWithSingleSpaceAfterH2},
 	{inputWithMultipleSpacesAfterH2},
+	{inputWithLineBreaksBetweenRules},
+	{inputWithLineBreaksBeforeAndAfter},
+	{inputWithLineBreaksBetweenRulesAndSpecs},
+	{inputWithLineBreakAfterFooter},
 }
 
 func TestSpecsHeaderContract(t *testing.T) {
@@ -53,7 +110,6 @@ func TestSpecsHeaderContract(t *testing.T) {
 		issue := issue{nil, ""}
 		expected := `
 This is a description of an issue.
-
 More description after the specs.`
 		actual, _ := issue.removeSpecsFrom(tt.input)
 
