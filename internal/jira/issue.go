@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/agilepathway/gauge-jira/internal/json"
+	"github.com/agilepathway/gauge-jira/internal/regex"
 )
 
 const (
@@ -102,8 +103,5 @@ type description string
 // (hypothetically) in the Gauge Jira plugin itself which inadvertently led to a duplicate examples
 // section instead of replacing the existing one.
 func (desc description) isValid() bool {
-	regex := regexp.MustCompile(specsHeaderRegex)
-	matches := regex.FindAllStringIndex(string(desc), -1)
-
-	return len(matches) < 2 //nolint:gomnd
+	return regex.CountMatches(string(desc), specsHeaderRegex) < 2 //nolint:gomnd
 }
