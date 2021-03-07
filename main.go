@@ -26,12 +26,20 @@ type handler struct {
 }
 
 func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails) (*gauge_messages.Empty, error) {
-	var specFilenames []string //nolint:prealloc
+	var ( //nolint:prealloc
+		specsAbsolutePaths []string
+		specs              []jira.Spec
+	)
+
 	for _, arg := range strings.Split(os.Getenv(gaugeSpecsDir), fileSeparator) {
-		specFilenames = append(specFilenames, util.GetFiles(arg)...)
+		specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(arg)...)
 	}
 
-	jira.PublishSpecs(specFilenames)
+	for _, absolutePath := range specsAbsolutePaths {
+		specs = append(specs, jira.NewSpec(absolutePath))
+	}
+
+	jira.PublishSpecs(specs)
 
 	return &gauge_messages.Empty{}, nil
 }
@@ -68,4 +76,5 @@ func checkRequiredConfigVars() {
 	env.GetRequired("JIRA_BASE_URL")
 	env.GetRequired("JIRA_USERNAME")
 	env.GetRequired("JIRA_TOKEN")
+	env.GetRequired("SPECS_GIT_URL")
 }

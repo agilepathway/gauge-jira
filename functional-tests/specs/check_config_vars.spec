@@ -12,3 +12,5 @@ tags: java, dotnet, ruby, python, js
 
 * Required configuration variable "JIRA_TOKEN" must be set
 
+* Required configuration variable "SPECS_GIT_URL" must be set
+

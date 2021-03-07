@@ -58,9 +58,10 @@ jobs:
 
       - name: ${{ matrix.jira-version }} FTs
         env:
-          JIRA_BASE_URL: ${{secrets[matrix.jira-base-url]}}
-          JIRA_USERNAME: ${{secrets[matrix.jira-username]}}
-          JIRA_TOKEN: ${{secrets[matrix.jira-token]}}
+          JIRA_BASE_URL: ${{ secrets[matrix.jira-base-url] }}
+          JIRA_USERNAME: ${{ secrets[matrix.jira-username] }}
+          JIRA_TOKEN: ${{ secrets[matrix.jira-token] }}
+          SPECS_GIT_URL: ${{ secrets.SPECS_GIT_URL }}
         run: |
           cd functional-tests
           ./gradlew clean ft
