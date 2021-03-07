@@ -21,10 +21,12 @@ import static java.util.Arrays.asList;
 public abstract class GaugeProject {
     private static final Boolean INITIALIZE_LOCK = true;
 
-    private static final List<String> PRODUCT_ENVS = asList("GAUGE_ROOT", "GAUGE_HOME", "GAUGE_SOURCE_BUILD", "GAUGE_PYTHON_COMMAND");
-    private static final List<String> GAUGE_ENVS = asList("gauge_custom_classpath", "overwrite_reports", "GAUGE_INTERNAL_PORT",
-            "GAUGE_PROJECT_ROOT", "logs_directory", "GAUGE_DEBUG_OPTS", "GAUGE_API_PORT", "gauge_reports_dir", "screenshot_on_failure",
-            "save_execution_result", "enable_multithreading", "screenshots_dir");
+    private static final List<String> PRODUCT_ENVS = asList("GAUGE_ROOT", "GAUGE_HOME", "GAUGE_SOURCE_BUILD",
+            "GAUGE_PYTHON_COMMAND");
+    private static final List<String> GAUGE_ENVS = asList("gauge_custom_classpath", "overwrite_reports",
+            "GAUGE_INTERNAL_PORT", "GAUGE_PROJECT_ROOT", "logs_directory", "GAUGE_DEBUG_OPTS", "GAUGE_API_PORT",
+            "gauge_reports_dir", "screenshot_on_failure", "save_execution_result", "enable_multithreading",
+            "screenshots_dir");
     private static final String PRODUCT_PREFIX = "GAUGE_";
     static final String PRINT_PARAMS = "print params";
     static final String THROW_EXCEPTION = "throw exception";
@@ -56,50 +58,49 @@ public abstract class GaugeProject {
 
     public static GaugeProject createProject(String language, String projName) throws IOException {
         switch (language.toLowerCase()) {
-            case "java":
-                return new JavaProject(projName);
-            default:
-                return new UnknownProject(language, projName);
+        case "java":
+            return new JavaProject(projName);
+        default:
+            return new UnknownProject(language, projName);
         }
     }
 
     public boolean initialize(boolean remoteTemplate) throws Exception {
-        executeGaugeCommand(new String[]{
-                "config", "plugin_kill_timeout", "60000"}, null);
-        if(remoteTemplate && language.equals("js")){
-            return executeGaugeCommand(new String[]{"init", "-l", "debug", "js_simple"}, null);
+        executeGaugeCommand(new String[] { "config", "plugin_kill_timeout", "60000" }, null);
+        if (remoteTemplate && language.equals("js")) {
+            return executeGaugeCommand(new String[] { "init", "-l", "debug", "js_simple" }, null);
         }
 
         if (remoteTemplate) {
-            return executeGaugeCommand(new String[]{"init", "-l", "debug", language}, null);
+            return executeGaugeCommand(new String[] { "init", "-l", "debug", language }, null);
         }
 
-        if(Boolean.parseBoolean(System.getenv("cache_remote_init"))){
+        if (Boolean.parseBoolean(System.getenv("cache_remote_init"))) {
             return cacheAndFetchFromLocalTemplate();
         }
 
-        return copyLocalTemplateIfExists(language) || executeGaugeCommand(new String[]{"init", "-l", "debug", language}, null);
+        return copyLocalTemplateIfExists(language)
+                || executeGaugeCommand(new String[] { "init", "-l", "debug", language }, null);
     }
 
-    private boolean isLocalTemplateAvaialable(String language){
+    private boolean isLocalTemplateAvaialable(String language) {
         String gauge_project_root = System.getenv("GAUGE_PROJECT_ROOT");
         Path templatePath = Paths.get(gauge_project_root, "resources", "LocalTemplates", language);
         return (Files.exists(templatePath));
     }
 
     private boolean cacheAndFetchFromLocalTemplate() throws InterruptedException {
-        synchronized(INITIALIZE_LOCK){//synchronized block
+        synchronized (INITIALIZE_LOCK) {// synchronized block
             String gauge_project_root = System.getenv("GAUGE_PROJECT_ROOT");
             Path templatePath = Paths.get(gauge_project_root, "resources", "LocalTemplates", language);
 
             try {
-                if(isLocalTemplateAvaialable(language)) {
+                if (isLocalTemplateAvaialable(language)) {
                     FileUtils.copyDirectory(templatePath.toFile(), this.projectDir);
                     return true;
-                }
-                else {
+                } else {
                     String projectName = language.equals("js") ? "js_simple" : language;
-                    if(executeGaugeCommand(new String[]{"init", "-l","debug", projectName}, null)) {
+                    if (executeGaugeCommand(new String[] { "init", "-l", "debug", projectName }, null)) {
                         FileUtils.copyDirectory(this.projectDir, templatePath.toFile());
                         return true;
                     }
@@ -110,7 +111,6 @@ public abstract class GaugeProject {
             }
         }
     }
-
 
     private boolean copyLocalTemplateIfExists(String language) {
         String gauge_project_root = System.getenv("GAUGE_PROJECT_ROOT");
@@ -138,7 +138,8 @@ public abstract class GaugeProject {
         String specsDir = StringUtils.isEmpty(specsDirName) ? GaugeProject.specsDirName : specsDirName;
         File specFile = getSpecFile(name, specsDir);
         if (specFile.exists()) {
-            throw new RuntimeException("Failed to create specification with name: " + name + "." + specFile.getAbsolutePath() + ": File already exists");
+            throw new RuntimeException("Failed to create specification with name: " + name + "."
+                    + specFile.getAbsolutePath() + ": File already exists");
         }
         Specification specification = new Specification(name);
         specification.saveAs(specFile);
@@ -180,26 +181,35 @@ public abstract class GaugeProject {
         }
         return null;
     }
-    
+
     public boolean executeSpecFolder(String specFolder) throws Exception {
-        return executeGaugeCommand(new String[]{"run", "--simple-console", "--verbose", specFolder}, null);
+        return executeGaugeCommand(new String[] { "run", "--simple-console", "--verbose", specFolder }, null);
     }
 
     public boolean executeSpecFromFolder(String spec, String specFolder) throws Exception {
         File oldProjectDir = this.projectDir;
         this.projectDir = new File(oldProjectDir, specFolder);
-        boolean exitCode = executeGaugeCommand(new String[]{"run", "--simple-console", "--verbose", spec}, null);
+        boolean exitCode = executeGaugeCommand(new String[] { "run", "--simple-console", "--verbose", spec }, null);
         this.projectDir = oldProjectDir;
         return exitCode;
     }
 
     public ExecutionSummary publishJiraDocumentation() throws Exception {
-        String[] args = new String[]{"docs", "jira", "specs/"};
-        boolean success = executeGaugeCommand(args, null);
+        return publishJiraDocumentation(null);
+    }
+
+    public ExecutionSummary publishJiraDocumentation(Map<String, String> envVars) throws Exception {
+        String[] args = new String[] { "docs", "jira", "specs/" };
+        boolean success = executeGaugeCommand(args, envVars);
         return new ExecutionSummary(String.join(" ", args), success, lastProcessStdout, lastProcessStderr);
     }
 
-    private boolean executeGaugeCommand(String[] args, HashMap<String, String> envVars) throws IOException, InterruptedException {
+    public ExecutionSummary publishJiraDocumentationWithConfigVarUnset(String configVar) throws Exception {
+        return publishJiraDocumentation(Map.of(configVar, ""));
+    }
+
+    private boolean executeGaugeCommand(String[] args, Map<String, String> envVars)
+            throws IOException, InterruptedException {
         ArrayList<String> command = new ArrayList<>();
         command.add(executableName);
         Collections.addAll(command, args);
@@ -218,7 +228,8 @@ public abstract class GaugeProject {
         processBuilder.environment().put("GAUGE_TELEMETRY_ENABLED", "false");
         processBuilder.environment().put("PYTHONUNBUFFERED", "1");
         processBuilder.environment().put("logs_directory", logFolder);
-        if(Util.getCurrentLanguage().equals("java")) processBuilder.environment().put("enable_multithreading", "true");
+        if (Util.getCurrentLanguage().equals("java"))
+            processBuilder.environment().put("enable_multithreading", "true");
 
         if (envVars != null) {
             processBuilder.environment().putAll(envVars);
@@ -259,9 +270,9 @@ public abstract class GaugeProject {
     public static void implement(Table impl, TableRow row, boolean appendCode) throws Exception {
         if (impl.getColumnNames().contains("implementation")) {
             StepImpl stepImpl = new StepImpl(row.getCell("step text"), row.getCell("implementation"),
-                    Boolean.parseBoolean(row.getCell("continue on failure")), appendCode,
-                    row.getCell("error type"), row.getCell("implementation dir"));
-            if(impl.getColumnNames().contains("package_name"))
+                    Boolean.parseBoolean(row.getCell("continue on failure")), appendCode, row.getCell("error type"),
+                    row.getCell("implementation dir"));
+            if (impl.getColumnNames().contains("package_name"))
                 stepImpl.setPackageName(row.getCell("package_name"));
             getCurrentProject().implementStep(stepImpl);
         }
@@ -273,13 +284,15 @@ public abstract class GaugeProject {
 
     public abstract List<String> getLanguageSpecificGitIgnoreText();
 
-    public abstract String getStepImplementation(StepValueExtractor.StepValue stepValue, String implementation, List<String> paramTypes, boolean appendCode);
+    public abstract String getStepImplementation(StepValueExtractor.StepValue stepValue, String implementation,
+            List<String> paramTypes, boolean appendCode);
 
     public abstract void createHookWithPrint(String hookLevel, String hookType, String implementation) throws Exception;
 
     public abstract void createHookWithException(String hookLevel, String hookType) throws IOException;
 
-    public abstract void createHooksWithTagsAndPrintMessage(String hookLevel, String hookType, String printString, String aggregation, Table tags) throws IOException;
+    public abstract void createHooksWithTagsAndPrintMessage(String hookLevel, String hookType, String printString,
+            String aggregation, Table tags) throws IOException;
 
     public String getLastProcessStdout() {
         return lastProcessStdout;
