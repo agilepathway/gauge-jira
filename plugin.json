@@ -1,6 +1,6 @@
 {
     "id": "jira",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "name": "Jira",
     "description": "Publishes Gauge specifications to Jira",
     "install": {
