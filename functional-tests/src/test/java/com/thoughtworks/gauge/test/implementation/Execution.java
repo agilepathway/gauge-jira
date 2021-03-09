@@ -9,15 +9,22 @@ import com.thoughtworks.gauge.test.common.ExecutionSummaryAssert;
 public class Execution {
 
     private String getFormattedProcessOutput() {
-        return "\n*************** Process output start************\n" + getCurrentProject().getLastProcessStdout() + "\n*************** Process output end************\n";
+        return "\n*************** Process output start************\n" + getCurrentProject().getLastProcessStdout()
+                + "\n*************** Process output end************\n";
     }
 
     private ExecutionSummaryAssert assertOn(ExecutionSummary summary, boolean result) {
-        return ExecutionSummaryAssert.assertThat(summary).withFailMessage(getFormattedProcessOutput()).hasSuccess(result);
+        return ExecutionSummaryAssert.assertThat(summary).withFailMessage(getFormattedProcessOutput())
+                .hasSuccess(result);
     }
 
     @Step("Publish Jira Documentation for the current project")
     public void publishJiraDocumentationForCurrentProject() throws Exception {
         assertOn(getCurrentProject().publishJiraDocumentation(), true);
+    }
+
+    @Step("Publish Jira Documentation for the current project with no <variable> configured")
+    public void publishJiraDocumentationForCurrentProjectWithConfigVarUnset(String configVar) throws Exception {
+        assertOn(getCurrentProject().publishJiraDocumentationWithConfigVarUnset(configVar), false);
     }
 }

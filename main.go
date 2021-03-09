@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/agilepathway/gauge-jira/gauge_messages"
+	"github.com/agilepathway/gauge-jira/internal/env"
 	"github.com/agilepathway/gauge-jira/internal/jira"
 	"github.com/agilepathway/gauge-jira/util"
 	"google.golang.org/grpc"
@@ -45,6 +46,8 @@ func (h *handler) stopServer() {
 }
 
 func main() {
+	checkRequiredConfigVars()
+
 	err := os.Chdir(projectRoot)
 	util.Fatal("failed to change directory to project root.", err)
 
@@ -59,4 +62,10 @@ func main() {
 	gauge_messages.RegisterDocumenterServer(server, h)
 	fmt.Printf("Listening on port:%d /n", l.Addr().(*net.TCPAddr).Port)
 	server.Serve(l) //nolint:errcheck,gosec
+}
+
+func checkRequiredConfigVars() {
+	env.GetRequired("JIRA_BASE_URL")
+	env.GetRequired("JIRA_USERNAME")
+	env.GetRequired("JIRA_TOKEN")
 }

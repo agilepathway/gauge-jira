@@ -1,0 +1,8 @@
+# Required configuration variable <configVar> must be set
+
+* Create a scenario linked to Jira issue(s) "JIRAGAUGE-1"
+
+* Publish Jira Documentation for the current project with no <configVar> configured
+
+* Console should contain "Aborting: " <configVar> " is not set. Set it and try again."
+* Console should contain "See https://github.com/agilepathway/gauge-jira#plugin-setup"
