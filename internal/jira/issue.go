@@ -6,13 +6,18 @@ import (
 	"strings"
 
 	"github.com/agilepathway/gauge-jira/internal/json"
+	"github.com/agilepathway/gauge-jira/internal/regex"
 )
 
 const (
-	specsHeaderMessage = "h2.Specification Examples"
-	specsHeader        = "----\n----\n" + specsHeaderMessage + "\n"
-	specsSubheader     = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
-	specsFooter        = "----\nEnd of specification examples\n----\n----\n"
+	specsHeaderMessage = "Specification Examples"
+	// Jira sometimes adds or removes a space after the heading, so we need to cater for both scenarios
+	specsHeaderMessageRegex = "h2.\\s*" + specsHeaderMessage
+	specsHeader             = "\n----\n----\nh2." + specsHeaderMessage + "\n"
+	specsHeaderRegex        = "\\s*----\\s*----\\s*" + specsHeaderMessageRegex + "\\s*"
+	specsSubheader          = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
+	specsFooter             = "\n----\nEnd of specification examples\n----\n----\n"
+	specsFooterRegex        = "\\s*----\\s*End of specification examples\\s*----\\s*----\\s*"
 )
 
 type issue struct {
@@ -54,7 +59,7 @@ func (i *issue) currentDescriptionWithExistingSpecsRemoved() (string, error) {
 }
 
 func (i *issue) removeSpecsFrom(input string) (string, error) {
-	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeader, specsFooter)
+	regexString := fmt.Sprintf("(?s)%s(.*)%s", specsHeaderRegex, specsFooterRegex)
 	r := regexp.MustCompile(regexString)
 
 	removed := r.ReplaceAllString(input, "\n")
@@ -98,5 +103,5 @@ type description string
 // (hypothetically) in the Gauge Jira plugin itself which inadvertently led to a duplicate examples
 // section instead of replacing the existing one.
 func (desc description) isValid() bool {
-	return strings.Count(string(desc), specsHeaderMessage) < 2 //nolint:gomnd
+	return regex.CountMatches(string(desc), specsHeaderRegex) < 2 //nolint:gomnd
 }
