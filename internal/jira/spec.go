@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/agilepathway/gauge-jira/internal/env"
+	"github.com/agilepathway/gauge-jira/internal/regex"
 	"github.com/agilepathway/gauge-jira/util"
 )
 
@@ -34,17 +35,8 @@ func (s *Spec) jiraFmt() string {
 }
 
 func (s *Spec) addGitLinkAfterSpecHeading(spec string) string {
-	pattern := regexp.MustCompile(`(h1.*)`)
-	isFirstMatch := true
-	output := pattern.ReplaceAllStringFunc(spec, func(match string) string {
-		if isFirstMatch { // only insert the Git link if it is the first h1 match
-			isFirstMatch = false
-			return pattern.ReplaceAllString(match, fmt.Sprintf("${1}\n%s\n", s.gitLinkInJiraFormat()))
-		}
-		return match // this is not the first match, so return the match unchanged
-	})
-
-	return output
+	replacement := fmt.Sprintf("${1}\n%s\n", s.gitLinkInJiraFormat())
+	return regex.ReplaceFirstMatch(spec, replacement, regexp.MustCompile(`(h1.*)`))
 }
 
 func (s *Spec) gitLinkInJiraFormat() string {
