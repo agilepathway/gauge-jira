@@ -3,7 +3,6 @@ package jira
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"regexp"
 	"strings"
 
@@ -14,13 +13,14 @@ import (
 
 // Spec decorates a Gauge specification so it can be published to Jira.
 type Spec struct {
-	absolutePath string
-	markdown     string
+	absolutePath       string // absolute path to the specification file, including the filename
+	specsBaseDirectory string // specs directory which contains all the specs
+	markdown           string // the spec contents
 }
 
 // NewSpec returns a new Spec object for the spec at the given absolute path
-func NewSpec(absolutePath string) Spec {
-	return Spec{absolutePath, readMarkdown(absolutePath)}
+func NewSpec(absolutePath string, specsBaseDirectory string) Spec {
+	return Spec{absolutePath, specsBaseDirectory, readMarkdown(absolutePath)}
 }
 
 func (s *Spec) issueKeys() []string {
@@ -50,8 +50,9 @@ func (s *Spec) gitURL() string {
 		strings.TrimPrefix(s.relativePath(), "/")
 }
 
+// relativePath is the path from the specs base directory to the spec file, including the filename
 func (s *Spec) relativePath() string {
-	return strings.TrimPrefix(s.absolutePath, os.Getenv("GAUGE_SPEC_DIRS"))
+	return strings.TrimPrefix(s.absolutePath, s.specsBaseDirectory)
 }
 
 func (s *Spec) downsizeHeadings(spec string) string {

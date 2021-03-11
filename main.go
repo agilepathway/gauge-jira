@@ -29,14 +29,13 @@ func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails)
 	var ( //nolint:prealloc
 		specsAbsolutePaths []string
 		specs              []jira.Spec
+		specsDirectoryPath = specsDirectoryPath()
 	)
 
-	for _, arg := range strings.Split(os.Getenv(gaugeSpecsDir), fileSeparator) {
-		specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(arg)...)
-	}
+	specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(specsDirectoryPath)...)
 
 	for _, absolutePath := range specsAbsolutePaths {
-		specs = append(specs, jira.NewSpec(absolutePath))
+		specs = append(specs, jira.NewSpec(absolutePath, specsDirectoryPath))
 	}
 
 	jira.PublishSpecs(specs)
@@ -54,6 +53,7 @@ func (h *handler) stopServer() {
 }
 
 func main() {
+	checkSpecsDirectoryPath()
 	checkRequiredConfigVars()
 
 	err := os.Chdir(projectRoot)
@@ -77,4 +77,14 @@ func checkRequiredConfigVars() {
 	env.GetRequired("JIRA_USERNAME")
 	env.GetRequired("JIRA_TOKEN")
 	env.GetRequired("SPECS_GIT_URL")
+}
+
+func checkSpecsDirectoryPath() {
+	if len(strings.Split(specsDirectoryPath(), fileSeparator)) > 1 {
+		panic("Aborting: this plugin only accepts one specs directory as a command-line argument.")
+	}
+}
+
+func specsDirectoryPath() string {
+	return os.Getenv(gaugeSpecsDir)
 }

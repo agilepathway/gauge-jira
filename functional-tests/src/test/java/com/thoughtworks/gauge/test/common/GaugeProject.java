@@ -195,17 +195,29 @@ public abstract class GaugeProject {
     }
 
     public ExecutionSummary publishJiraDocumentation() throws Exception {
-        return publishJiraDocumentation(null);
+        return publishJiraDocumentation(Map.of());
     }
 
-    public ExecutionSummary publishJiraDocumentation(Map<String, String> envVars) throws Exception {
-        String[] args = new String[] { "docs", "jira", "specs/" };
+    public ExecutionSummary publishJiraDocumentation(String[] args, Map<String, String> envVars) throws Exception {
         boolean success = executeGaugeCommand(args, envVars);
         return new ExecutionSummary(String.join(" ", args), success, lastProcessStdout, lastProcessStderr);
     }
 
+    public ExecutionSummary publishJiraDocumentation(Map<String, String> envVars) throws Exception {
+        return publishJiraDocumentation(new String[] { "docs", "jira", "specs/" }, envVars);
+    }
+
     public ExecutionSummary publishJiraDocumentationWithConfigVarUnset(String configVar) throws Exception {
         return publishJiraDocumentation(Map.of(configVar, ""));
+    }
+
+    public ExecutionSummary publishJiraDocumentationForTwoProjects() throws Exception {
+        String[] args = new String[] { "docs", "jira", "specs1", "specs2" };
+        return publishJiraDocumentation(args);
+    }
+
+    public ExecutionSummary publishJiraDocumentation(String[] args) throws Exception {
+        return publishJiraDocumentation(args, Map.of());
     }
 
     private boolean executeGaugeCommand(String[] args, Map<String, String> envVars)
