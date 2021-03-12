@@ -35,7 +35,7 @@ func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails)
 	specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(specsDirectoryPath)...)
 
 	for _, absolutePath := range specsAbsolutePaths {
-		specs = append(specs, jira.NewSpec(absolutePath, specsDirectoryPath))
+		specs = append(specs, jira.NewSpec(absolutePath, specsDirectoryPath, env.GetRequired("SPECS_GIT_URL")))
 	}
 
 	jira.PublishSpecs(specs)

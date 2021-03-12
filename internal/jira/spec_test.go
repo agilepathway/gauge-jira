@@ -2,12 +2,12 @@ package jira
 
 import (
 	"fmt"
-	"os"
 	"testing"
 )
 
 const (
 	specsBaseDirectory = "/home/vscode/workspace/gauge-jira/functional_tests/specs/"
+	specsGitURL        = "https://github.com/agilepathway/gauge-jira/tree/master/functional-tests/specs"
 	exampleFilename    = "example.spec"
 	defaultExampleSpec = `
 ----
@@ -65,10 +65,11 @@ var specTests = []struct { //nolint:gochecknoglobals
 //nolint:errcheck,gosec
 func TestAddGitLinkAfterSpecHeading(t *testing.T) {
 	for _, tt := range specTests {
-		os.Setenv("SPECS_GIT_URL", "https://github.com/agilepathway/gauge-jira/tree/master/functional-tests/specs")
-
-		spec := Spec{absolutePath: specsBaseDirectory + tt.filename, specsBaseDirectory: specsBaseDirectory, markdown: ""}
-		expected := fmt.Sprintf(tt.expected, os.Getenv("SPECS_GIT_URL"), tt.filename)
+		spec := Spec{
+			absolutePath:       specsBaseDirectory + tt.filename,
+			specsBaseDirectory: specsBaseDirectory,
+			specsGitURL:        specsGitURL}
+		expected := fmt.Sprintf(tt.expected, specsGitURL, tt.filename)
 		actual := spec.addGitLinkAfterSpecHeading(tt.input)
 
 		if expected != actual {

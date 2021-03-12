@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/agilepathway/gauge-jira/internal/env"
 	"github.com/agilepathway/gauge-jira/internal/regex"
 	"github.com/agilepathway/gauge-jira/util"
 )
@@ -16,11 +15,12 @@ type Spec struct {
 	absolutePath       string // absolute path to the specification file, including the filename
 	specsBaseDirectory string // specs directory which contains all the specs
 	markdown           string // the spec contents
+	specsGitURL        string // the URL for the specs directory on e.g. GitHub, GitLab
 }
 
 // NewSpec returns a new Spec object for the spec at the given absolute path
-func NewSpec(absolutePath string, specsBaseDirectory string) Spec {
-	return Spec{absolutePath, specsBaseDirectory, readMarkdown(absolutePath)}
+func NewSpec(absolutePath string, specsBaseDirectory string, specsGitURL string) Spec {
+	return Spec{absolutePath, specsBaseDirectory, readMarkdown(absolutePath), specsGitURL}
 }
 
 func (s *Spec) issueKeys() []string {
@@ -45,7 +45,7 @@ func (s *Spec) gitLinkInJiraFormat() string {
 
 func (s *Spec) gitURL() string {
 	// ensure that we have the right number of slashes
-	return strings.TrimSuffix(env.GetRequired("SPECS_GIT_URL"), "/") +
+	return strings.TrimSuffix(s.specsGitURL, "/") +
 		"/" +
 		strings.TrimPrefix(s.relativePath(), "/")
 }
