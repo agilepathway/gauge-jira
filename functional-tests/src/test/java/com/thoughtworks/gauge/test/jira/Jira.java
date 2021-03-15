@@ -67,7 +67,7 @@ public class Jira {
                 ----
                 ----
                 h2.Specification Examples
-                h3.Do not edit these examples here.  Edit them using Gauge.
+                h3.Edit these examples in Git (link is below), not here in Jira
                 """;
     }
 
@@ -90,11 +90,13 @@ public class Jira {
     private String expectedBasicScenarioHeader(String scenarioName) {
         return """
                 ----
-                h3. %s
+                h3. %1$s
+                [View or edit this spec in Git|%2$s/%1$s.spec]
+
 
                 tags:\040
 
-                """.formatted(scenarioName);
+                """.formatted(scenarioName, System.getenv("SPECS_GIT_URL"));
     }
 
     private String expectedBasicSpec() {

@@ -15,18 +15,21 @@ const (
 	specsHeaderMessageRegex = "h2.\\s*" + specsHeaderMessage
 	specsHeader             = "\n----\n----\nh2." + specsHeaderMessage + "\n"
 	specsHeaderRegex        = "\\s*----\\s*----\\s*" + specsHeaderMessageRegex + "\\s*"
-	specsSubheader          = "h3.Do not edit these examples here.  Edit them using Gauge.\n"
 	specsFooter             = "\n----\nEnd of specification examples\n----\n----\n"
 	specsFooterRegex        = "\\s*----\\s*End of specification examples\\s*----\\s*----\\s*"
 )
 
 type issue struct {
-	specs []spec
+	specs []Spec
 	key   string
 }
 
-func (i *issue) addSpec(spec spec) {
+func (i *issue) addSpec(spec Spec) {
 	i.specs = append(i.specs, spec)
+}
+
+func (i *issue) specsSubheader() string {
+	return "h3.Edit these examples in Git (link is below), not here in Jira\n"
 }
 
 func (i *issue) specsFormattedForJira() (string, error) {
@@ -36,7 +39,7 @@ func (i *issue) specsFormattedForJira() (string, error) {
 	}
 
 	return json.Fmt(currentDescriptionWithExistingSpecsRemoved +
-		specsHeader + specsSubheader + i.jiraFmtSpecs() + specsFooter), nil
+		specsHeader + i.specsSubheader() + i.jiraFmtSpecs() + specsFooter), nil
 }
 
 func (i *issue) jiraFmtSpecs() string {

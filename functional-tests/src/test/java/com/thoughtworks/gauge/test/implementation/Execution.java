@@ -27,4 +27,9 @@ public class Execution {
     public void publishJiraDocumentationForCurrentProjectWithConfigVarUnset(String configVar) throws Exception {
         assertOn(getCurrentProject().publishJiraDocumentationWithConfigVarUnset(configVar), false);
     }
+
+    @Step("Publish Jira Documentation for two projects")
+    public void publishJiraDocumentationForTwoProjects() throws Exception {
+        assertOn(getCurrentProject().publishJiraDocumentationForTwoProjects(), false);
+    }
 }

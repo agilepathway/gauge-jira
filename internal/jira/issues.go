@@ -13,19 +13,19 @@ func newIssues() issues {
 	return make(map[string]issue)
 }
 
-func (i issues) addSpecs(specFilenames []string) {
-	for _, filename := range specFilenames {
-		i.addSpecToAllItsLinkedIssues(newSpec(filename))
+func (i issues) addSpecs(specs []Spec) {
+	for _, spec := range specs {
+		i.addSpecToAllItsLinkedIssues(spec)
 	}
 }
 
-func (i issues) addSpecToAllItsLinkedIssues(spec spec) {
+func (i issues) addSpecToAllItsLinkedIssues(spec Spec) {
 	for _, issueKey := range spec.issueKeys() {
 		i.addSpecToIssue(spec, issueKey)
 	}
 }
 
-func (i issues) addSpecToIssue(spec spec, issueKey string) {
+func (i issues) addSpecToIssue(spec Spec, issueKey string) {
 	issue := i[issueKey]
 	if issue.key == "" {
 		issue.key = issueKey

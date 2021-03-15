@@ -4,38 +4,67 @@ import (
 	"fmt"
 	"io/ioutil"
 	"regexp"
+	"strings"
 
+	"github.com/agilepathway/gauge-jira/internal/regex"
 	"github.com/agilepathway/gauge-jira/util"
 )
 
-type spec struct {
-	filename string
-	markdown string
+// Spec decorates a Gauge specification so it can be published to Jira.
+type Spec struct {
+	absolutePath       string // absolute path to the specification file, including the filename
+	specsBaseDirectory string // specs directory which contains all the specs
+	markdown           string // the spec contents
+	specsGitURL        string // the URL for the specs directory on e.g. GitHub, GitLab
 }
 
-func newSpec(filename string) spec {
-	return spec{filename, readMarkdown(filename)}
+// NewSpec returns a new Spec object for the spec at the given absolute path
+func NewSpec(absolutePath string, specsBaseDirectory string, specsGitURL string) Spec {
+	return Spec{absolutePath, specsBaseDirectory, readMarkdown(absolutePath), specsGitURL}
 }
 
-func (s *spec) issueKeys() []string {
+func (s *Spec) issueKeys() []string {
 	return parseIssueKeys(s.markdown)
 }
 
-func (s *spec) jiraFmt() string {
-	jiraFormatted := mdToJira(s.markdown)
-	return "----\n" + s.downsizeHeadings(jiraFormatted)
+func (s *Spec) jiraFmt() string {
+	jiraFormattedSpec := mdToJira(s.markdown)
+	jiraFormattedSpecWithGitLink := s.addGitLinkAfterSpecHeading(jiraFormattedSpec)
+
+	return "----\n" + s.downsizeHeadings(jiraFormattedSpecWithGitLink)
 }
 
-func (s *spec) downsizeHeadings(input string) string {
-	input = regexp.MustCompile(`h1\.`).ReplaceAllString(input, "h3.")
-	input = regexp.MustCompile(`h2\.`).ReplaceAllString(input, "h4.")
-
-	return input
+func (s *Spec) addGitLinkAfterSpecHeading(spec string) string {
+	replacement := fmt.Sprintf("${1}\n%s\n", s.gitLinkInJiraFormat())
+	return regex.ReplaceFirstMatch(spec, replacement, regexp.MustCompile(`(h1.*)`))
 }
 
-func readMarkdown(filename string) string {
-	specBytes, err := ioutil.ReadFile(filename) //nolint:gosec
-	util.Fatal(fmt.Sprintf("Error while reading %s file", filename), err)
+func (s *Spec) gitLinkInJiraFormat() string {
+	return fmt.Sprintf("[View or edit this spec in Git|%s]", s.gitURL())
+}
+
+func (s *Spec) gitURL() string {
+	// ensure that we have the right number of slashes
+	return strings.TrimSuffix(s.specsGitURL, "/") +
+		"/" +
+		strings.TrimPrefix(s.relativePath(), "/")
+}
+
+// relativePath is the path from the specs base directory to the spec file, including the filename
+func (s *Spec) relativePath() string {
+	return strings.TrimPrefix(s.absolutePath, s.specsBaseDirectory)
+}
+
+func (s *Spec) downsizeHeadings(spec string) string {
+	spec = regexp.MustCompile(`h1\.`).ReplaceAllString(spec, "h3.")
+	spec = regexp.MustCompile(`h2\.`).ReplaceAllString(spec, "h4.")
+
+	return spec
+}
+
+func readMarkdown(absolutePath string) string {
+	specBytes, err := ioutil.ReadFile(absolutePath) //nolint:gosec
+	util.Fatal(fmt.Sprintf("Error while reading %s file", absolutePath), err)
 
 	return string(specBytes)
 }

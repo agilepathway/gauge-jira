@@ -26,12 +26,19 @@ type handler struct {
 }
 
 func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails) (*gauge_messages.Empty, error) {
-	var specFilenames []string //nolint:prealloc
-	for _, arg := range strings.Split(os.Getenv(gaugeSpecsDir), fileSeparator) {
-		specFilenames = append(specFilenames, util.GetFiles(arg)...)
+	var ( //nolint:prealloc
+		specsAbsolutePaths []string
+		specs              []jira.Spec
+		specsDirectoryPath = specsDirectoryPath()
+	)
+
+	specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(specsDirectoryPath)...)
+
+	for _, absolutePath := range specsAbsolutePaths {
+		specs = append(specs, jira.NewSpec(absolutePath, specsDirectoryPath, env.GetRequired("SPECS_GIT_URL")))
 	}
 
-	jira.PublishSpecs(specFilenames)
+	jira.PublishSpecs(specs)
 
 	return &gauge_messages.Empty{}, nil
 }
@@ -46,6 +53,7 @@ func (h *handler) stopServer() {
 }
 
 func main() {
+	checkSpecsDirectoryPath()
 	checkRequiredConfigVars()
 
 	err := os.Chdir(projectRoot)
@@ -68,4 +76,15 @@ func checkRequiredConfigVars() {
 	env.GetRequired("JIRA_BASE_URL")
 	env.GetRequired("JIRA_USERNAME")
 	env.GetRequired("JIRA_TOKEN")
+	env.GetRequired("SPECS_GIT_URL")
+}
+
+func checkSpecsDirectoryPath() {
+	if len(strings.Split(specsDirectoryPath(), fileSeparator)) > 1 {
+		panic("Aborting: this plugin only accepts one specs directory as a command-line argument.")
+	}
+}
+
+func specsDirectoryPath() string {
+	return os.Getenv(gaugeSpecsDir)
 }

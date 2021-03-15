@@ -8,9 +8,9 @@ import (
 )
 
 // PublishSpecs publishes the given Gauge specifications to Jira
-func PublishSpecs(specFilenames []string) {
+func PublishSpecs(specs []Spec) {
 	issues := newIssues()
-	issues.addSpecs(specFilenames)
+	issues.addSpecs(specs)
 	issues.publish()
 }
 
