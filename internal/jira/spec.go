@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"regexp"
-	"strings"
 
 	"github.com/agilepathway/gauge-jira/internal/regex"
 	"github.com/agilepathway/gauge-jira/util"
@@ -12,15 +11,14 @@ import (
 
 // Spec decorates a Gauge specification so it can be published to Jira.
 type Spec struct {
-	absolutePath       string // absolute path to the specification file, including the filename
-	specsBaseDirectory string // specs directory which contains all the specs
-	markdown           string // the spec contents
-	specsGitURL        string // the URL for the specs directory on e.g. GitHub, GitLab
+	path     string // absolute path to the specification file, including the filename
+	markdown string // the spec contents
+	gitURL   string // the URL for the specs directory on e.g. GitHub, GitLab, Bitbucket
 }
 
 // NewSpec returns a new Spec object for the spec at the given absolute path
-func NewSpec(absolutePath string, specsBaseDirectory string, specsGitURL string) Spec {
-	return Spec{absolutePath, specsBaseDirectory, readMarkdown(absolutePath), specsGitURL}
+func NewSpec(absolutePath string, gitURL string) Spec {
+	return Spec{absolutePath, readMarkdown(absolutePath), gitURL}
 }
 
 func (s *Spec) issueKeys() []string {
@@ -35,27 +33,17 @@ func (s *Spec) jiraFmt() string {
 }
 
 func (s *Spec) addGitLinkAfterSpecHeading(spec string) string {
+	if s.gitURL == "" {
+		return spec
+	}
+
 	replacement := fmt.Sprintf("${1}\n%s\n", s.gitLinkInJiraFormat())
+
 	return regex.ReplaceFirstMatch(spec, replacement, regexp.MustCompile(`(h1.*)`))
 }
 
 func (s *Spec) gitLinkInJiraFormat() string {
-	return fmt.Sprintf("[View or edit this spec in Git|%s]", s.gitURL())
-}
-
-func (s *Spec) gitURL() string {
-	// convert the slashes in Windows paths to URL format
-	formattedRelativePath := strings.ReplaceAll(s.relativePath(), "\\", "/")
-
-	// ensure that we have the right number of slashes
-	return strings.TrimSuffix(s.specsGitURL, "/") +
-		"/" +
-		strings.TrimPrefix(formattedRelativePath, "/")
-}
-
-// relativePath is the path from the specs base directory to the spec file, including the filename
-func (s *Spec) relativePath() string {
-	return strings.TrimPrefix(s.absolutePath, s.specsBaseDirectory)
+	return fmt.Sprintf("[View or edit this spec in Git|%s]", s.gitURL)
 }
 
 func (s *Spec) downsizeHeadings(spec string) string {

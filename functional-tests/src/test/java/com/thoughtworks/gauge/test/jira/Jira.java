@@ -16,6 +16,14 @@ public class Jira {
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
+    @Step("Jira issue <issuekey> description should contain basic scenario named <scenario name>")
+    public void verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(String issueKey, String scenarioName) {
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeaderWithoutGitLink(scenarioName)
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String issueDescription = getDescriptionForIssue(issueKey);
+        assertThat(issueDescription).isEqualTo(expectedScenario);
+    }
+
     @Step("Jira issue <issuekey> description should contain <originalDescription> and basic scenario")
     public void verifyJiraIssueContainsOriginalDescriptionAndBasicScenario(String issueKey,
             String originalDescription) {
@@ -26,9 +34,15 @@ public class Jira {
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
-    @Step("Jira issue <issuekey> description should contain basic scenario")
+    @Step({ "Jira issue <issuekey> description should contain basic scenario",
+            "Jira issue <issuekey> description should contain basic scenario with Git link" })
     public void verifyJiraIssueDescriptionForBasicScenario(String issueKey) {
         verifyJiraIssueDescriptionForBasicScenario(issueKey, issueKey);
+    }
+
+    @Step("Jira issue <issuekey> description should contain basic scenario without Git link")
+    public void verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(String issueKey) {
+        verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(issueKey, issueKey);
     }
 
     @Step("Jira issue <issuekey> description should contain basic scenario, twice")
@@ -88,15 +102,31 @@ public class Jira {
     }
 
     private String expectedBasicScenarioHeader(String scenarioName) {
+        // The GitHub user and repo are as defined in the current Gauge test project's
+        // git config, copied from the `gitconfigexample` file
+        String githubBaseURL = "https://github.com/example-user/example-repo/blob/master/specs";
         return """
                 ----
-                h3. %1$s
-                [View or edit this spec in Git|%2$s/%1$s.spec]
+                h3. %2$s
+                [View or edit this spec in Git|%1$s/%2$s.spec]
 
 
                 tags:\040
 
-                """.formatted(scenarioName, System.getenv("SPECS_GIT_URL"));
+                """.formatted(githubBaseURL, scenarioName);
+    }
+
+    private String expectedBasicScenarioHeaderWithoutGitLink(String scenarioName) {
+        // The GitHub user and repo are as defined in the current Gauge test project's
+        // git config, copied from the `gitconfigexample` file
+        String githubBaseURL = "https://github.com/example-user/example-repo/blob/master/specs";
+        return """
+                ----
+                h3. %2$s
+
+                tags:\040
+
+                """.formatted(githubBaseURL, scenarioName);
     }
 
     private String expectedBasicSpec() {
