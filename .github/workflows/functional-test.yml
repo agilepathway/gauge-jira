@@ -8,16 +8,39 @@ on:
       # branches. Without this we would end up running this job twice for non
       # forked PRs, once for the push and then once for opening the PR.
       # See https://github.community/t/how-to-trigger-an-action-on-push-or-pull-request-but-not-both/16662/10
-    - '**:**'
+      - "**:**"
 jobs:
+  create-and-store-binaries:
+    name: Create and store binaries for all platforms
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Go 1.15
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.15
+        id: go
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Create Jira plugin binaries on all platforms
+        run: |
+          go run build/make.go --all-platforms && go run build/make.go --distro --all-platforms
+
+      - name: Store Jira plugin binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: gauge-jira-binaries-all-platforms
+          path: bin/distros/
 
   functional-tests:
-    name: ${{ matrix.language }} ${{ matrix.jira-version }} ${{ matrix.os }} FTs 
+    name: ${{ matrix.language }} ${{ matrix.jira-version }} ${{ matrix.os }} FTs
     runs-on: ${{ matrix.os }}
+    needs: [create-and-store-binaries]
     strategy:
       matrix:
-        # no windows because `go run build/make.go --distro` errors (can't find zip executable)
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         language: [java]
         jira-version: [Jira Server, Jira Cloud]
         include:
@@ -29,7 +52,7 @@ jobs:
             jira-base-url: JIRA_CLOUD_BASE_URL
             jira-username: JIRA_CLOUD_USERNAME
             jira-token: JIRA_CLOUD_TOKEN
-      
+
     steps:
       - name: Set up Go 1.15
         uses: actions/setup-go@v1
@@ -43,7 +66,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v1
         with:
-          java-version: '15' # Need minimum Java 15 for text blocks in functional tests
+          java-version: "15" # Need minimum Java 15 for text blocks in functional tests
 
       - name: Install Gauge
         uses: getgauge/setup-gauge@master
@@ -51,12 +74,32 @@ jobs:
           gauge-version: master
           gauge-plugins: java, html-report, screenshot
 
-      - name: Install jira plugin
-        run: |
-          go run build/make.go && go run build/make.go --distro
-          gauge install jira --file $(ls -d bin/distros/*.zip)
+      - name: Download binaries
+        uses: actions/download-artifact@v2
+        with:
+          name: gauge-jira-binaries-all-platforms
+          path: ${{ runner.temp }}
 
-      - name: ${{ matrix.jira-version }} FTs
+      - name: Install jira plugin (windows)
+        working-directory: ${{ runner.temp }}
+        if: matrix.os == 'windows-latest'
+        run: |
+          gauge install jira --file $(dir *windows.x86_64.zip)
+
+      - name: Install jira plugin (linux)
+        working-directory: ${{ runner.temp }}
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          gauge install jira --file $(ls -d *linux.x86_64.zip)
+
+      - name: Install jira plugin (macos)
+        working-directory: ${{ runner.temp }}
+        if: matrix.os == 'macos-latest'
+        run: |
+          gauge install jira --file $(ls -d *darwin.x86_64.zip)
+
+      - name: FTs ${{ matrix.jira-version }} linux or osx
+        if: matrix.os != 'windows-latest'
         env:
           JIRA_BASE_URL: ${{ secrets[matrix.jira-base-url] }}
           JIRA_USERNAME: ${{ secrets[matrix.jira-username] }}
@@ -65,6 +108,18 @@ jobs:
         run: |
           cd functional-tests
           ./gradlew clean ft
+
+      - name: FTs ${{ matrix.jira-version }} windows
+        if: matrix.os == 'windows-latest'
+        env:
+          JIRA_BASE_URL: ${{ secrets[matrix.jira-base-url] }}
+          JIRA_USERNAME: ${{ secrets[matrix.jira-username] }}
+          JIRA_TOKEN: ${{ secrets[matrix.jira-token] }}
+          SPECS_GIT_URL: ${{ secrets.SPECS_GIT_URL }}
+        run: |
+          cd functional-tests
+          .\gradlew.bat clean ft
+        shell: pwsh
 
       - name: Upload logs
         uses: actions/upload-artifact@v1
