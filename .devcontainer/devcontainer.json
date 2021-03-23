@@ -24,7 +24,7 @@
 			"--fast"
 		],
 		"go.testEnvVars": {
-			"GAUGE_PROJECT_ROOT": "/home/vscode/workspace/gauge-jira"
+			"GAUGE_PROJECT_ROOT": "${containerWorkspaceFolder}"
 		},
 		"files.autoSave": "afterDelay",
 		"files.autoSaveDelay": 500,
@@ -37,7 +37,7 @@
 		"vscjava.vscode-java-pack"
 	],
 	"containerEnv": {
-		"GAUGE_PROJECT_ROOT": "/home/vscode/workspace/gauge-jira"
+		"GAUGE_PROJECT_ROOT": "${containerWorkspaceFolder}"
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
