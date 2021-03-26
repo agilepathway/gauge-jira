@@ -44,10 +44,13 @@ func (s *Spec) gitLinkInJiraFormat() string {
 }
 
 func (s *Spec) gitURL() string {
+	// convert the slashes in Windows paths to URL format
+	formattedRelativePath := strings.ReplaceAll(s.relativePath(), "\\", "/")
+
 	// ensure that we have the right number of slashes
 	return strings.TrimSuffix(s.specsGitURL, "/") +
 		"/" +
-		strings.TrimPrefix(s.relativePath(), "/")
+		strings.TrimPrefix(formattedRelativePath, "/")
 }
 
 // relativePath is the path from the specs base directory to the spec file, including the filename
