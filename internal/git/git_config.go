@@ -32,6 +32,20 @@ func discoverRemoteGitURL() (string, error) {
 	return remoteGitURL, nil
 }
 
+func discoverCurrentBranch() (string, error) {
+	_, head, err := findHeadFile()
+	if err != nil {
+		return "", errors.Wrapf(err, "there was a problem obtaining the HEAD file")
+	}
+
+	currentBranch, err := discoverCurrentBranchFromHeadFile(head)
+	if err != nil {
+		return "", errors.Wrapf(err, "there was a problem obtaining the current branch from the HEAD file")
+	}
+
+	return currentBranch, nil
+}
+
 // discoverRemoteGitURLFromGitConfig discovers the remote git URL from the given git configuration
 func discoverRemoteGitURLFromGitConfig(gitConf string) (string, error) {
 	cfg, err := parseGitConfig(gitConf)
@@ -54,8 +68,42 @@ func discoverRemoteGitURLFromGitConfig(gitConf string) (string, error) {
 	return rURL, nil
 }
 
+func discoverCurrentBranchFromHeadFile(headPath string) (string, error) {
+	if headPath == "" {
+		return "", fmt.Errorf("no HEAD file defined")
+	}
+
+	headFile, err := ioutil.ReadFile(headPath) //nolint:gosec
+
+	if err != nil {
+		return "", fmt.Errorf("failed to load %s due to %s", headPath, err)
+	}
+
+	return abbreviatedHead(string(headFile))
+}
+
+func abbreviatedHead(fullHead string) (string, error) {
+	if !strings.Contains(fullHead, "refs/heads/") {
+		return "", fmt.Errorf("git is in detached HEAD state, HEAD is: %s", fullHead)
+	}
+
+	s := strings.TrimSpace(fullHead)
+	s = strings.TrimPrefix(s, "ref:")
+	s = strings.TrimSpace(s)
+
+	return strings.TrimPrefix(s, "refs/heads/"), nil
+}
+
 // findGitConfigDir tries to find the `.git` directory either in the current directory or in parent directories
 func findGitConfigDir() (string, string, error) {
+	return findGitFile("config")
+}
+
+func findHeadFile() (string, string, error) {
+	return findGitFile("HEAD")
+}
+
+func findGitFile(fileName string) (string, string, error) {
 	var err error
 
 	dir, err := os.Getwd()
@@ -64,7 +112,7 @@ func findGitConfigDir() (string, string, error) {
 	}
 
 	for {
-		gitDir := filepath.Join(dir, ".git/config")
+		gitDir := filepath.Join(dir, ".git/"+fileName)
 		exists, err := fileExists(gitDir)
 
 		if err != nil {

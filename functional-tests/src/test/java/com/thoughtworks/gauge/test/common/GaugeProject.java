@@ -36,6 +36,7 @@ public abstract class GaugeProject {
     static final String CAPTURE_SCREENSHOT = "capture screenshot";
     private static ThreadLocal<GaugeProject> currentProject = ThreadLocal.withInitial(() -> null);
     private static String executableName = "gauge";
+    private static String gitExecutableName = "git";
     private static String specsDirName = "specs";
     private File projectDir;
     private String language;
@@ -267,13 +268,43 @@ public abstract class GaugeProject {
         return lastProcess.exitValue() == 0;
     }
 
+    private boolean executeGitCommand(String... args) throws IOException, InterruptedException {
+        ArrayList<String> command = new ArrayList<>();
+        command.add(gitExecutableName);
+        Collections.addAll(command, args);
+        ProcessBuilder processBuilder = new ProcessBuilder(command.toArray(new String[command.size()]));
+        processBuilder.directory(projectDir);
+        Process lastProcess = processBuilder.start();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(lastProcess.getInputStream()));
+        String line;
+        String newLine = System.getProperty("line.separator");
+        lastProcessStdout = "";
+        while ((line = br.readLine()) != null) {
+            lastProcessStdout = lastProcessStdout.concat(line).concat(newLine);
+        }
+        lastProcessStderr = "";
+        br = new BufferedReader(new InputStreamReader(lastProcess.getErrorStream()));
+        while ((line = br.readLine()) != null) {
+            lastProcessStderr = lastProcessStderr.concat(line).concat(newLine);
+        }
+        lastProcess.waitFor();
+        return lastProcess.exitValue() == 0;
+    }
+
     public void deleteSpec(String specName) {
         getSpecFile(specName).delete();
     }
 
-    public void addGitConfig(GitConfig gitConfig) throws IOException {
-        Path gitConfigPath = Paths.get(this.projectDir.getAbsolutePath(), ".git", "config");
-        FileUtils.copyFile(gitConfig.file(), gitConfigPath.toFile());
+    public void addGitConfig(GitConfig gitConfig) throws Exception {
+        executeGitCommand("init");
+        executeGitCommand("remote", "add", "origin", gitConfig.remoteOriginURL());
+    }
+
+    public void simulateGitDetachedHead() throws IOException {
+        Path headPath = Paths.get(this.projectDir.getAbsolutePath(), ".git", "HEAD");
+        String exampleCommitSHA = "35c86739424934c9f460af16ecbaf0d8dca65769";
+        Files.writeString(headPath, exampleCommitSHA);
     }
 
     private void filterConflictingEnv(ProcessBuilder processBuilder) {
