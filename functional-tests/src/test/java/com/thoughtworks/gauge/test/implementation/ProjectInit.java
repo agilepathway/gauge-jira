@@ -14,6 +14,17 @@ public class ProjectInit {
         currentProject.set(new ProjectBuilder()
                 .withLangauge(Util.getCurrentLanguage())
                 .withProjectName("gauge_jira_specs")
+                .withGitConfig()
+                .withoutExampleSpec()
+                .build(false));
+    }
+
+    @Step("Initialize an empty Gauge project without a Git config")
+    public void projectInitWithoutGitConfig() throws Exception {
+        currentProject.set(new ProjectBuilder()
+                .withLangauge(Util.getCurrentLanguage())
+                .withProjectName("gauge_jira_specs")
+                .withoutGitConfig()
                 .withoutExampleSpec()
                 .build(false));
     }

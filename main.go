@@ -9,6 +9,7 @@ import (
 
 	"github.com/agilepathway/gauge-jira/gauge_messages"
 	"github.com/agilepathway/gauge-jira/internal/env"
+	"github.com/agilepathway/gauge-jira/internal/git"
 	"github.com/agilepathway/gauge-jira/internal/jira"
 	"github.com/agilepathway/gauge-jira/util"
 	"google.golang.org/grpc"
@@ -27,15 +28,16 @@ type handler struct {
 
 func (h *handler) GenerateDocs(c context.Context, m *gauge_messages.SpecDetails) (*gauge_messages.Empty, error) {
 	var ( //nolint:prealloc
-		specsAbsolutePaths []string
-		specs              []jira.Spec
-		specsDirectoryPath = specsDirectoryPath()
+		specsPaths []string // the absolute paths for all the specs
+		specs      []jira.Spec
 	)
 
-	specsAbsolutePaths = append(specsAbsolutePaths, util.GetFiles(specsDirectoryPath)...)
+	for _, providedSpecPath := range strings.Split(providedSpecsPaths(), fileSeparator) {
+		specsPaths = append(specsPaths, util.GetFiles(providedSpecPath)...)
+	}
 
-	for _, absolutePath := range specsAbsolutePaths {
-		specs = append(specs, jira.NewSpec(absolutePath, specsDirectoryPath, env.GetRequired("SPECS_GIT_URL")))
+	for _, specPath := range specsPaths {
+		specs = append(specs, jira.NewSpec(specPath, git.SpecGitURL(specPath, projectRoot)))
 	}
 
 	jira.PublishSpecs(specs)
@@ -53,7 +55,6 @@ func (h *handler) stopServer() {
 }
 
 func main() {
-	checkSpecsDirectoryPath()
 	checkRequiredConfigVars()
 
 	err := os.Chdir(projectRoot)
@@ -76,15 +77,14 @@ func checkRequiredConfigVars() {
 	env.GetRequired("JIRA_BASE_URL")
 	env.GetRequired("JIRA_USERNAME")
 	env.GetRequired("JIRA_TOKEN")
-	env.GetRequired("SPECS_GIT_URL")
 }
 
-func checkSpecsDirectoryPath() {
-	if len(strings.Split(specsDirectoryPath(), fileSeparator)) > 1 {
-		panic("Aborting: this plugin only accepts one specs directory as a command-line argument.")
-	}
-}
-
-func specsDirectoryPath() string {
+// providedSpecsPaths returns the list of specs paths passed in
+// by the user of the plugin (converted to absolute paths by the
+// core Gauge engine).
+// Each spec path can be a directory or a spec file, as the `gauge docs`
+// command accepts arguments in the same way as `gauge run`:
+// https://docs.gauge.org/execution.html#multiple-arguments-passed-to-gauge-run
+func providedSpecsPaths() string {
 	return os.Getenv(gaugeSpecsDir)
 }

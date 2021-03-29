@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	specsBaseDirectory = "/home/vscode/workspace/gauge-jira/functional_tests/specs/"
-	specsGitURL        = "https://github.com/agilepathway/gauge-jira/tree/master/functional-tests/specs"
 	exampleFilename    = "example.spec"
+	specAbsolutePath   = "/home/vscode/workspace/gauge-jira/functional_tests/specs/" + exampleFilename
+	specGitURL         = "https://github.com/agilepathway/gauge-jira/tree/master/functional-tests/specs/" + exampleFilename
 	defaultExampleSpec = `
 ----
 h1. This is the spec heading
@@ -18,7 +18,7 @@ h2. This is a scenario
 	expectedDefaultExampleSpec = `
 ----
 h1. This is the spec heading
-[View or edit this spec in Git|%s/%s]
+[View or edit this spec in Git|%s]
 
 
 h2. This is a scenario
@@ -33,7 +33,7 @@ h2. This is a scenario
 	expectedNoLineBreakBetweenHeadingAndScenario = `
 ----
 h1. This is the spec heading
-[View or edit this spec in Git|%s/%s]
+[View or edit this spec in Git|%s]
 
 h2. This is a scenario
 `
@@ -45,7 +45,7 @@ h2. This is a scenario which has the text h1. in it
 	expectedh1TextInScenario = `
 ----
 h1. This is the spec heading
-[View or edit this spec in Git|%s/%s]
+[View or edit this spec in Git|%s]
 
 h2. This is a scenario which has the text h1. in it
 `
@@ -66,10 +66,9 @@ var specTests = []struct { //nolint:gochecknoglobals
 func TestAddGitLinkAfterSpecHeading(t *testing.T) {
 	for _, tt := range specTests {
 		spec := Spec{
-			absolutePath:       specsBaseDirectory + tt.filename,
-			specsBaseDirectory: specsBaseDirectory,
-			specsGitURL:        specsGitURL}
-		expected := fmt.Sprintf(tt.expected, specsGitURL, tt.filename)
+			path:   specAbsolutePath,
+			gitURL: specGitURL}
+		expected := fmt.Sprintf(tt.expected, specGitURL)
 		actual := spec.addGitLinkAfterSpecHeading(tt.input)
 
 		if expected != actual {

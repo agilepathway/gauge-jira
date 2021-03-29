@@ -30,6 +30,6 @@ public class Execution {
 
     @Step("Publish Jira Documentation for two projects")
     public void publishJiraDocumentationForTwoProjects() throws Exception {
-        assertOn(getCurrentProject().publishJiraDocumentationForTwoProjects(), false);
+        assertOn(getCurrentProject().publishJiraDocumentationForTwoProjects(), true);
     }
 }

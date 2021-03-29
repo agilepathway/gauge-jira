@@ -4,6 +4,8 @@ import com.thoughtworks.gauge.Table;
 import com.thoughtworks.gauge.TableRow;
 import com.thoughtworks.gauge.datastore.ScenarioDataStore;
 import com.thoughtworks.gauge.test.StepImpl;
+import com.thoughtworks.gauge.test.git.Config.GitConfig;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -267,6 +269,11 @@ public abstract class GaugeProject {
 
     public void deleteSpec(String specName) {
         getSpecFile(specName).delete();
+    }
+
+    public void addGitConfig(GitConfig gitConfig) throws IOException {
+        Path gitConfigPath = Paths.get(this.projectDir.getAbsolutePath(), ".git", "config");
+        FileUtils.copyFile(gitConfig.file(), gitConfigPath.toFile());
     }
 
     private void filterConflictingEnv(ProcessBuilder processBuilder) {

@@ -1,15 +1,14 @@
-# Only one specs directory can be provided
+# Multiple specs directories or files can be provided
 
 tags: java, dotnet, ruby, python, js
 
-Gauge documentation plugins allow for multiple specs directories to be passed in as command-line
-arguments.  Our Jira plugin can only accept one though, as we match up the specs directory with
-the specs Git URL that is also provided by the plugin user.
+Gauge documentation plugins allow for multiple specs directories or files to be specified 
+as command-line arguments.
 
 * Initialize an empty Gauge project
 
-## The plugin fails if more than one specs directory is provided
+## The plugin accepts more than one specs directory
 
 * Publish Jira Documentation for two projects
 
-* Console should contain "Aborting: this plugin only accepts one specs directory as a command-line argument."
+* Console should contain "No valid Jira specifications were found - so nothing to publish to Jira"

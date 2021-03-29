@@ -84,7 +84,7 @@ If you find a problem with a particular version of Jira Server or Jira Cloud, pl
 
 ### Plugin setup
 
-There are four variables to configure, as either:
+There are three variables to configure, as either:
 
 1. environment variables
 
@@ -101,11 +101,6 @@ This user must have permissions to edit issues in the Jira projects that the spe
 
 `JIRA_TOKEN` The Jira token is the password for the given `JIRA_USERNAME` if using Jira Server, or an
 [api token](https://confluence.atlassian.com/cloud/api-tokens-938839638.html) if using Jira Cloud.
-
-`SPECS_GIT_URL` e.g. https://github.com/agilepathway/gauge-jira/tree/master/functional-tests/specs 
-: the full URL for the specs directory for your project on e.g. GitHub, GitLab, Bitbucket etc. 
-Used to create links in the Jira issues back to the specs' Git source files.  The URL can end with or 
-without a space.
 
 
 ### Running the plugin (i.e. publishing specs to Jira)
