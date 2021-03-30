@@ -7,6 +7,7 @@ import com.thoughtworks.gauge.test.StepImpl;
 import com.thoughtworks.gauge.test.git.Config.GitConfig;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -225,11 +226,8 @@ public abstract class GaugeProject {
 
     private boolean executeGaugeCommand(String[] args, Map<String, String> envVars)
             throws IOException, InterruptedException {
-        ArrayList<String> command = new ArrayList<>();
-        command.add(executableName);
-        Collections.addAll(command, args);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.toArray(new String[command.size()]));
-        processBuilder.directory(projectDir);
+        String[] command = ArrayUtils.addFirst(args, executableName);
+        ProcessBuilder processBuilder = new ProcessBuilder(command).directory(projectDir);
         String gauge_project_root = System.getenv("GAUGE_PROJECT_ROOT");
         String folderName = (String) ScenarioDataStore.get("log_proj_name");
         String logFolder = Util.combinePath(new File("./testLogs").getAbsolutePath(), folderName);
@@ -250,8 +248,11 @@ public abstract class GaugeProject {
             processBuilder.environment().putAll(envVars);
         }
 
-        Process lastProcess = processBuilder.start();
+        return process(processBuilder);
+    }
 
+    private boolean process(ProcessBuilder processBuilder) throws IOException, InterruptedException {
+        Process lastProcess = processBuilder.start();
         BufferedReader br = new BufferedReader(new InputStreamReader(lastProcess.getInputStream()));
         String line;
         String newLine = System.getProperty("line.separator");
@@ -269,27 +270,8 @@ public abstract class GaugeProject {
     }
 
     private boolean executeGitCommand(String... args) throws IOException, InterruptedException {
-        ArrayList<String> command = new ArrayList<>();
-        command.add(gitExecutableName);
-        Collections.addAll(command, args);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.toArray(new String[command.size()]));
-        processBuilder.directory(projectDir);
-        Process lastProcess = processBuilder.start();
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(lastProcess.getInputStream()));
-        String line;
-        String newLine = System.getProperty("line.separator");
-        lastProcessStdout = "";
-        while ((line = br.readLine()) != null) {
-            lastProcessStdout = lastProcessStdout.concat(line).concat(newLine);
-        }
-        lastProcessStderr = "";
-        br = new BufferedReader(new InputStreamReader(lastProcess.getErrorStream()));
-        while ((line = br.readLine()) != null) {
-            lastProcessStderr = lastProcessStderr.concat(line).concat(newLine);
-        }
-        lastProcess.waitFor();
-        return lastProcess.exitValue() == 0;
+        String[] command = ArrayUtils.addFirst(args, gitExecutableName);
+        return process(new ProcessBuilder(command).directory(projectDir));
     }
 
     public void deleteSpec(String specName) {
