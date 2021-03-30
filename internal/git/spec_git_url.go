@@ -16,12 +16,14 @@ func SpecGitURL(absoluteSpecPath, projectRoot string) string {
 	remoteGitURL, err := discoverRemoteGitURL()
 
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 
 	gitWebURL, err := buildGitWebURL(remoteGitURL)
 
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 
@@ -30,6 +32,7 @@ func SpecGitURL(absoluteSpecPath, projectRoot string) string {
 	branch, err := discoverCurrentBranch()
 
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 

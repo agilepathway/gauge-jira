@@ -11,8 +11,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/pkg/errors"
-
 	gitcfg "github.com/go-git/go-git/v5/config"
 )
 
@@ -21,12 +19,12 @@ import (
 func discoverRemoteGitURL() (string, error) {
 	_, gitConfig, err := findGitConfigDir()
 	if err != nil {
-		return "", errors.Wrapf(err, "there was a problem obtaining the git config dir")
+		return "", fmt.Errorf("there was a problem obtaining the remote Git URL: %w", err)
 	}
 
 	remoteGitURL, err := discoverRemoteGitURLFromGitConfig(gitConfig)
 	if err != nil {
-		return "", errors.Wrapf(err, "there was a problem obtaining the remote Git URL")
+		return "", fmt.Errorf("there was a problem obtaining the remote Git URL: %w", err)
 	}
 
 	return remoteGitURL, nil
@@ -35,12 +33,12 @@ func discoverRemoteGitURL() (string, error) {
 func discoverCurrentBranch() (string, error) {
 	_, head, err := findHeadFile()
 	if err != nil {
-		return "", errors.Wrapf(err, "there was a problem obtaining the HEAD file")
+		return "", fmt.Errorf("there was a problem obtaining the HEAD file: %w", err)
 	}
 
 	currentBranch, err := discoverCurrentBranchFromHeadFile(head)
 	if err != nil {
-		return "", errors.Wrapf(err, "there was a problem obtaining the current branch from the HEAD file")
+		return "", fmt.Errorf("there was a problem obtaining the current branch from the HEAD file: %w", err)
 	}
 
 	return currentBranch, nil
@@ -149,7 +147,7 @@ func fileExists(path string) (bool, error) {
 		return false, nil
 	}
 
-	return false, errors.Wrapf(err, "failed to check if file exists %s", path)
+	return false, fmt.Errorf("failed to check if file exists %s %w", path, err)
 }
 
 func parseGitConfig(gitConf string) (*gitcfg.Config, error) {

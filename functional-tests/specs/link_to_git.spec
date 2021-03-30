@@ -38,7 +38,9 @@ tags: java, dotnet, ruby, python, js
 
 * Publish Jira Documentation for the current project
 
-* Console output should be "Published specifications to 1 Jira issue"
+* Console should contain "there was a problem obtaining the remote Git URL"
+
+* Console should contain "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-1" description should contain basic scenario without Git link
 
@@ -54,6 +56,8 @@ tags: java, dotnet, ruby, python, js
 
 * Publish Jira Documentation for the current project
 
-* Console output should be "Published specifications to 1 Jira issue"
+* Console should contain "there was a problem obtaining the current branch from the HEAD file: git is in detached HEAD state"
+
+* Console should contain "Published specifications to 1 Jira issue"
 
 * Jira issue "JIRAGAUGE-1" description should contain basic scenario without Git link
