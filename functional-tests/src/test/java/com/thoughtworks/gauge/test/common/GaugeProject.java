@@ -7,6 +7,7 @@ import com.thoughtworks.gauge.test.StepImpl;
 import com.thoughtworks.gauge.test.git.Config.GitConfig;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.BufferedReader;
@@ -36,6 +37,7 @@ public abstract class GaugeProject {
     static final String CAPTURE_SCREENSHOT = "capture screenshot";
     private static ThreadLocal<GaugeProject> currentProject = ThreadLocal.withInitial(() -> null);
     private static String executableName = "gauge";
+    private static String gitExecutableName = "git";
     private static String specsDirName = "specs";
     private File projectDir;
     private String language;
@@ -224,11 +226,8 @@ public abstract class GaugeProject {
 
     private boolean executeGaugeCommand(String[] args, Map<String, String> envVars)
             throws IOException, InterruptedException {
-        ArrayList<String> command = new ArrayList<>();
-        command.add(executableName);
-        Collections.addAll(command, args);
-        ProcessBuilder processBuilder = new ProcessBuilder(command.toArray(new String[command.size()]));
-        processBuilder.directory(projectDir);
+        String[] command = ArrayUtils.addFirst(args, executableName);
+        ProcessBuilder processBuilder = new ProcessBuilder(command).directory(projectDir);
         String gauge_project_root = System.getenv("GAUGE_PROJECT_ROOT");
         String folderName = (String) ScenarioDataStore.get("log_proj_name");
         String logFolder = Util.combinePath(new File("./testLogs").getAbsolutePath(), folderName);
@@ -249,8 +248,11 @@ public abstract class GaugeProject {
             processBuilder.environment().putAll(envVars);
         }
 
-        Process lastProcess = processBuilder.start();
+        return process(processBuilder);
+    }
 
+    private boolean process(ProcessBuilder processBuilder) throws IOException, InterruptedException {
+        Process lastProcess = processBuilder.start();
         BufferedReader br = new BufferedReader(new InputStreamReader(lastProcess.getInputStream()));
         String line;
         String newLine = System.getProperty("line.separator");
@@ -267,13 +269,24 @@ public abstract class GaugeProject {
         return lastProcess.exitValue() == 0;
     }
 
+    private boolean executeGitCommand(String... args) throws IOException, InterruptedException {
+        String[] command = ArrayUtils.addFirst(args, gitExecutableName);
+        return process(new ProcessBuilder(command).directory(projectDir));
+    }
+
     public void deleteSpec(String specName) {
         getSpecFile(specName).delete();
     }
 
-    public void addGitConfig(GitConfig gitConfig) throws IOException {
-        Path gitConfigPath = Paths.get(this.projectDir.getAbsolutePath(), ".git", "config");
-        FileUtils.copyFile(gitConfig.file(), gitConfigPath.toFile());
+    public void addGitConfig(GitConfig gitConfig) throws Exception {
+        executeGitCommand("init");
+        executeGitCommand("remote", "add", "origin", gitConfig.remoteOriginURL());
+    }
+
+    public void simulateGitDetachedHead() throws IOException {
+        Path headPath = Paths.get(this.projectDir.getAbsolutePath(), ".git", "HEAD");
+        String exampleCommitSHA = "35c86739424934c9f460af16ecbaf0d8dca65769";
+        Files.writeString(headPath, exampleCommitSHA);
     }
 
     private void filterConflictingEnv(ProcessBuilder processBuilder) {

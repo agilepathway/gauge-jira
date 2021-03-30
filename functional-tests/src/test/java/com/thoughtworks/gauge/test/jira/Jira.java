@@ -16,14 +16,6 @@ public class Jira {
         assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
-    @Step("Jira issue <issuekey> description should contain basic scenario named <scenario name>")
-    public void verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(String issueKey, String scenarioName) {
-        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeaderWithoutGitLink(scenarioName)
-                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
-        String issueDescription = getDescriptionForIssue(issueKey);
-        assertThat(issueDescription).isEqualTo(expectedScenario);
-    }
-
     @Step("Jira issue <issuekey> description should contain <originalDescription> and basic scenario")
     public void verifyJiraIssueContainsOriginalDescriptionAndBasicScenario(String issueKey,
             String originalDescription) {
@@ -42,7 +34,10 @@ public class Jira {
 
     @Step("Jira issue <issuekey> description should contain basic scenario without Git link")
     public void verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(String issueKey) {
-        verifyJiraIssueDescriptionForBasicScenarioWithoutGitLink(issueKey, issueKey);
+        String expectedScenario = expectedExamplesHeader() + expectedBasicScenarioHeaderWithoutGitLink(issueKey)
+                + expectedBasicSpec() + expectedBasicScenarioFooter() + expectedExamplesFooter();
+        String issueDescription = getDescriptionForIssue(issueKey);
+        assertThat(issueDescription).isEqualTo(expectedScenario);
     }
 
     @Step("Jira issue <issuekey> description should contain basic scenario, twice")
@@ -102,9 +97,11 @@ public class Jira {
     }
 
     private String expectedBasicScenarioHeader(String scenarioName) {
-        // The GitHub user and repo are as defined in the current Gauge test project's
-        // git config, copied from the `gitconfigexample` file
-        String githubBaseURL = "https://github.com/example-user/example-repo/blob/master/specs";
+        /*
+         * The expected URL is as per {@link
+         * com.thoughtworks.gauge.test.git.Config.GitConfig#remoteOriginURL(String)}
+         */
+        String expectedGithubBaseURL = "https://github.com/example-user/example-repo/blob/master/specs";
         return """
                 ----
                 h3. %2$s
@@ -113,20 +110,17 @@ public class Jira {
 
                 tags:\040
 
-                """.formatted(githubBaseURL, scenarioName);
+                """.formatted(expectedGithubBaseURL, scenarioName);
     }
 
     private String expectedBasicScenarioHeaderWithoutGitLink(String scenarioName) {
-        // The GitHub user and repo are as defined in the current Gauge test project's
-        // git config, copied from the `gitconfigexample` file
-        String githubBaseURL = "https://github.com/example-user/example-repo/blob/master/specs";
         return """
                 ----
-                h3. %2$s
+                h3. %s
 
                 tags:\040
 
-                """.formatted(githubBaseURL, scenarioName);
+                """.formatted(scenarioName);
     }
 
     private String expectedBasicSpec() {

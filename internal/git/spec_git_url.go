@@ -16,18 +16,27 @@ func SpecGitURL(absoluteSpecPath, projectRoot string) string {
 	remoteGitURL, err := discoverRemoteGitURL()
 
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 
 	gitWebURL, err := buildGitWebURL(remoteGitURL)
 
 	if err != nil {
+		fmt.Println(err)
 		return ""
 	}
 
 	relativeSpecPath := strings.TrimPrefix(absoluteSpecPath, projectRoot)
 
-	return gitWebURL + "/blob/master" + toURLFormat(relativeSpecPath)
+	branch, err := discoverCurrentBranch()
+
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+
+	return gitWebURL + "/blob/" + branch + toURLFormat(relativeSpecPath)
 }
 
 // buildGitWebURL constructs the publicly accessible Git web URL from a Git remote URL
