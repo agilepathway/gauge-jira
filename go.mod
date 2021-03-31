@@ -7,6 +7,5 @@ require (
 	github.com/go-git/go-git/v5 v5.2.0
 	github.com/golang/protobuf v1.4.3
 	github.com/kalafut/m2j v0.0.3
-	github.com/pkg/errors v0.8.1
 	google.golang.org/grpc v1.33.2
 )
